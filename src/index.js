@@ -1,16 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import { AppContainer } from 'react-hot-loader'
-import './index.css';
-import App from './App';
+
+import './style/reset.scss';
+import 'antd/dist/antd.css'
+import { LocaleProvider } from 'antd'
+import zhCN from 'antd/lib/locale-provider/zh_CN';
+
+import App from './App.jsx';
 import registerServiceWorker from './registerServiceWorker';
 
 const render = Component => {
   ReactDOM.render(
-    <AppContainer>
-      <Component></Component>
-    </AppContainer>,
+  	<LocaleProvider locale={zhCN}>
+	    <AppContainer>
+	      <Component></Component>
+	    </AppContainer>
+	</LocaleProvider>,
     document.getElementById('root')
   )
 }
@@ -18,7 +24,7 @@ const render = Component => {
 render(App);
 
 if(module.hot) {
-  module.hot.accept('./App',() => {
+  module.hot.accept('./App.jsx',() => {
     render(App);
   });
 }
