@@ -1,15 +1,31 @@
 .bg {
 	height: 100%;
-	background: url('../imgs/bg.jpg') no-repeat;
-	background-size: 100%;
+	background: url('../imgs/bg.jpg') no-repeat 0 80px ;
+	position: relative;
+	.logo-name {
+		position: absolute;
+		left: 0;
+		top: 0;
+		height: 80px;
+	}
 	.login-form {
+		position: absolute;
+		top: 45%;
+		right: 10%;
+    transform: translateY(-50%);
 	  max-width: 350px;
 	  padding: 40px;
 	  border-radius: 10px;
 	  box-shadow: #666 0px 0px 10px;
 	  background-color: #fff;
-	  .logo {
+	  .logo1 {
+	  	width: 50%;
+	  	display: block;
+	  	margin: 0 auto;
+	  }
+	  .logo2 {
 	  	width: 100%;
+	  	margin: 35px auto;
 	  }
 	}
 	.login-form-forgot {
@@ -18,4 +34,14 @@
 	.login-form-button {
 	  width: 100%;
 	}
+}
+.text{
+	color: #fff;
+	position: absolute;
+	bottom: 50px;
+	width: 100%;
+	text-align: center;
+}
+.ant-form-item {
+	margin-bottom: 12px;
 }

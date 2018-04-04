@@ -1,0 +1,39 @@
+.ant-menu {
+	background-color: inherit;
+	color: #fff;
+	* {
+		&:selection {
+			color: #fff;
+		}
+		&:hover {
+			color: #fff;
+		}
+	}
+}
+.ant-menu-inline {
+	border-right: none;
+}
+.ant-menu-submenu > .ant-menu {
+	background-color: #22282e;
+}
+li:after {
+	border-right: none;
+}
+.ant-menu-item {
+	&:hover {
+		background-color: #42515F;
+	}
+}
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background-color: #00c1de;
+	color: #fff;
+}
+.ant-menu-vertical .ant-menu-item:after, .ant-menu-vertical-left .ant-menu-item:after, .ant-menu-vertical-right .ant-menu-item:after, .ant-menu-inline .ant-menu-item:after {
+	border-right: none;
+	width: 100%;
+}
+.ant-menu-inline .ant-menu-item, .ant-menu-inline .ant-menu-submenu-title {
+	width: 100%;
+	font-size: 13px;
+	color: #fff;
+}
