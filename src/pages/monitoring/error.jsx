@@ -2,18 +2,21 @@ import React from 'react'
 import { getWorkOrderList } from '../../api'
 import { getCookie } from '../../utils'
 import '../../style/pages/error.scss'
-import { Table, Pagination } from 'antd';
+import { Table, Pagination, Input, Button, Radio } from 'antd';
 const { Column } = Table;
+const Search = Input.Search;
 
 export default class Error extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			data: [],
+			sourceData: [],
 			orderList: [],
 			total: null,
 			page: 1,
-			row: 10
+			row: 10,
+			btnGroupVal: null,
+			orderStatu: null
 		}
 	}
 	async initData() {
@@ -24,20 +27,95 @@ export default class Error extends React.Component {
       item.key = item.fEventid
     })
     this.setState({
-    	data: res.data,
-      orderList: res.data,
+			sourceData: res.data,
+    	orderList: res.data.slice(0, this.state.row-1),
       total: res.data.length
     })
 	}
 	componentWillMount() {
-		
 		this.initData();
 	}
-	componentDidMount() {
+	keywordSearch = (event) => {
+		let keyword = event.target.value;
+		let arr = this.state.sourceData.filter(item => {
+			let needs = [
+				item.fEventid,
+				item.fRepairtime,
+				item.fAddress,
+				item.fEdesc,
+				item.fSerperson,
+				item.showstate
+			]
+			let result = needs.filter(each => {
+				each += ''
+				return each.includes(keyword)
+			});
+			return result.length !== 0
+		});
+		this.setState({
+			orderList: arr
+		})
+	}
+	pageChangeHandle = (page) => {
+		const { sourceData, row } = this.state
+		this.setState({
+			page,
+			orderList: sourceData.slice((page-1)*row, page*row)
+		})
+	}
+	sizeChangeHandle = (current, size) => {
+		const { sourceData, page } = this.state
+		this.setState({
+			row: size
+		}, () => {
+			this.setState({
+				orderList: sourceData.slice((page-1)*size, page*size)
+			})
+		})
+	}
+	btnGroupValChange = (e) => {
+		this.setState({
+			btnGroupVal: e.target.value
+		})
+	}
+	orderStatuChange =(e) => {
+		this.setState({
+			orderStatu: e.target.value
+		})
 	}
 	render() {
 		return (
 			<div className="main">
+				<ul className="search-area">
+					<li className="flex_ca">
+						<div style={{display: 'inline'}}>
+							<Button type="primary">派单</Button>
+							<Button type="primary" style={{marginLeft: '15px'}}>查看</Button>
+						</div>
+						<div className="search-btn">
+							<Search onInput={this.keywordSearch} className="w-250"/>
+							<Radio.Group 
+								value={this.state.btnGroupVal} 
+								onChange={this.btnGroupValChange}
+								style={{marginLeft: '5px'}}>
+								<Radio.Button value={1}>区域筛选</Radio.Button>
+								<Radio.Button value={2}>刷新</Radio.Button>
+							</Radio.Group>
+						</div>
+					</li>
+					<li>
+						工单状态：<Radio.Group 
+							value={this.state.orderStatu} 
+							onChange={this.orderStatuChange}
+							style={{marginLeft: '5px'}}>
+							<Radio.Button value={''}>全部</Radio.Button>
+							<Radio.Button value={2}>已派发</Radio.Button>
+							<Radio.Button value={3}>已响应</Radio.Button>
+							<Radio.Button value={4}>处理中</Radio.Button>
+							<Radio.Button value={6}>现场完成</Radio.Button>
+						</Radio.Group>
+					</li>
+				</ul>
 				<Table 
 					bordered
 					pagination={false}
@@ -73,10 +151,12 @@ export default class Error extends React.Component {
 					total={this.state.total} 
 					current={this.state.page}
 					pageSize={this.state.row}
-					pageSizeOptions={['4','10','12','14','16','18','20']}
+					pageSizeOptions={['10','12','14','16','18','20']}
 					showSizeChanger 
 					showQuickJumper 
 					showTotal={(total, range) => `共 ${total} 条`}
+					onChange={this.pageChangeHandle}
+					onShowSizeChange={this.sizeChangeHandle}
           />
 			</div>
 		)

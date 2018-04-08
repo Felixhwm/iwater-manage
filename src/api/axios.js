@@ -16,7 +16,7 @@ axios.interceptors.request.use((config) => {
   if (config.method === 'post') {
     config.data.Authorization = 'Bearer '+getCookie('token');
     config.data.userid = getCookie('userid');
-  }else if(config.method = 'get') {
+  }else if(config.method === 'get') {
     config.url +=  ('&Authorization=Bearer '+getCookie('token')+'&userid='+getCookie('userid'))
   }
   
