@@ -47,6 +47,12 @@
 }
 .ant-layout-content {
 	height: 100%;
+	> div {
+		height: 100%;
+		width: calc( 100% - 40px );
+		margin: 0 auto;
+		padding-top: 10px;
+	}
 }
 .ant-table-wrapper{
 	background-color: #fff;
@@ -56,7 +62,6 @@
 	margin-top: 15px;
 }
 .main {
-	padding: 10px 20px;
 	.search-area li{
 		padding: 15px 0;
 		

@@ -89,33 +89,43 @@ class Maps extends React.Component {
     const Loading = <div style={loadingStyle}>Loading Map...</div>;
     const { infoData } = this.state;
 		return (
-			<Map
-				plugins={['MapType','ToolBar']}
-				loading={Loading}
-				amapkey={'1dcf1cf6a824292676aba58a05ce853d'}
-				zoom={13.9} 
-				center={this.state.position}>
-				{
-					this.state.stationList.map((item, index) => 
-						<Marker 
-							key={item.fPid}
-							events={{click:() => this.clickHandle(item)}}
-							position={item.position}>
-							<img src={this.getIcon(item)} alt="logo"/>
-						</Marker>
-					)
-				}
-				<InfoWindow
-          position={infoData.position}
-          visible={this.state.infoVisible}
-          autoMove={true}
-          events={{close: this.closeHandle}}>
-          <p>{infoData.areaname}</p>
-          <p>{infoData.fMaintainCompany}</p>
-          <p>{infoData.maintainname}</p>
-          <p>{infoData.fPid}</p>
-        </InfoWindow>
-			</Map>
+			<div>
+				<ul className="totalRecord">
+					<li>污水站总数 <span>1111</span> 座</li>
+					<li>已安装监控 <span>233</span> 座</li>
+					<li>监控在线<span>233</span>座</li>
+					<li>监控离线<span>233</span>座</li>
+					<li>在线率<span>233</span>座</li>
+					<li>故障站点<span>233</span>座</li>
+				</ul>
+				<div className="map-box">
+					<Map
+						plugins={['MapType','ToolBar']}
+						loading={Loading}
+						amapkey={'1dcf1cf6a824292676aba58a05ce853d'}
+						zoom={13.9} 
+						center={this.state.position}>
+						{this.state.stationList.map((item, index) => 
+							<Marker 
+								key={item.fPid}
+								events={{click:() => this.clickHandle(item)}}
+								position={item.position}>
+								<img src={this.getIcon(item)} alt="logo"/>
+							</Marker>
+						)}
+						<InfoWindow
+							position={infoData.position}
+							visible={this.state.infoVisible}
+							autoMove={true}
+							events={{close: this.closeHandle}}>
+							<p>{infoData.areaname}</p>
+							<p>{infoData.fMaintainCompany}</p>
+							<p>{infoData.maintainname}</p>
+							<p>{infoData.fPid}</p>
+						</InfoWindow>
+					</Map>
+				</div>
+			</div>
 		)
 	}
 }
