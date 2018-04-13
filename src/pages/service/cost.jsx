@@ -1,19 +1,21 @@
-import React from 'react'
+import React, { Component } from 'react';
 
-export default class Error extends React.Component {
-	constructor() {
-		super();
-		this.state = {
-
-		}
-	}
-	async initData() {
-
-	}
-	componentWillMount() {
-		this.initData();
-	}
-	render() {
-
+class cost extends Component {
+  constructor(props) {
+    super(props);
+    
+  }
+  onchang() {
+    this.setState((state, props) => { return {  }});
+    
+  }
+  render() {
+    return (
+      <div>
+        
+      </div>
+    );
   }
 }
+
+export default cost;

@@ -9,12 +9,16 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';
 
 import App from './App.jsx';
 import registerServiceWorker from './registerServiceWorker';
+import { Provider } from 'react-redux'
+import store from './store'
 
 const render = Component => {
   ReactDOM.render(
   	<LocaleProvider locale={zhCN}>
 	    <AppContainer>
-	      <Component></Component>
+        <Provider store={store}>
+	        <Component></Component>
+        </Provider>
 	    </AppContainer>
 	</LocaleProvider>,
     document.getElementById('root')

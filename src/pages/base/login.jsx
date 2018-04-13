@@ -1,11 +1,8 @@
 import React from 'react';
 import md5 from 'js-md5';
-import { login } from '../../api'
-import { setCookie } from '../../utils'
-import '../../style/pages/login.scss'
-import Logo1 from '../../style/imgs/logo.png'
-import Logo2 from '../../style/imgs/logo_text.jpg'
-import Logo3 from '../../style/imgs/logo_name.jpg'
+import { login } from '@api'
+import { setCookie } from '@utils'
+import '@style/pages/login.scss'
 import { Form, Icon, Input, Button, message } from 'antd';
 const FormItem = Form.Item;
 
@@ -39,10 +36,10 @@ class LoginForm extends React.Component {
 		const { getFieldDecorator } = this.props.form;
 		return (
 			<div className="bg">
-				<img src={Logo3} className="logo-name" alt="logo"/>
+				<img src={require('@imgs/logo_name.jpg')} className="logo-name" alt="logo"/>
 				<Form onSubmit={this.handleSubmit} className="login-form">
-					<img src={Logo1} className="logo1" alt="logo"></img>
-					<img src={Logo2} className="logo2" alt="logo"></img>
+					<img src={require('@imgs/logo.png')} className="logo1" alt="logo"></img>
+					<img src={require('@imgs/logo_text.jpg')} className="logo2" alt="logo"></img>
 					<FormItem>
 	          {getFieldDecorator('name', {
 	            rules: [{ required: true, message: '请输入用户名！' }],

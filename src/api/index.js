@@ -9,4 +9,6 @@ export const getStationList = params => fetch('/web', params, 'POST');
 //获取所有站点设备状态
 export const getStationStatu = params => fetch('/table/deviceState/selectByIds', params, 'GET');
 //获取工单列表
-export const getWorkOrderList = params => fetch('/table/workorder/selectByPrimaryKey', params, 'GET')
+export const getWorkOrderList = params => fetch('/table/workorder/selectByPrimaryKey', params, 'GET');
+//获取区域菜单
+export const getAreaList = params => fetch('/web', params, 'POST');

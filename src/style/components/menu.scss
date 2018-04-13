@@ -1,3 +1,4 @@
+//Menu
 .ant-menu {
 	background-color: inherit;
 	color: #fff;
@@ -14,10 +15,10 @@
 	border-right: none;
 }
 .ant-menu-submenu > .ant-menu {
-	background-color: #22282e;
-}
-li:after {
-	border-right: none;
+  background-color: #22282e;
+  li:after {
+    border-right: none;
+  }
 }
 .ant-menu-item {
 	&:hover {
@@ -36,4 +37,12 @@ li:after {
 	width: 100%;
 	font-size: 13px;
 	color: #fff;
+}
+
+//Header
+.top-header {
+  .avator {
+    width: 40px;
+    height: 40px;
+  }
 }

@@ -1,8 +1,8 @@
 import React from 'react'
 import { Map, Marker, InfoWindow } from 'react-amap'
-import '../../style/pages/map.scss'
-import { getStationList, getStationStatu } from '../../api'
-import { getCookie } from '../../utils'
+import '@style/pages/map.scss'
+import { getStationList, getStationStatu } from '@api'
+import { getCookie } from '@utils'
 
 class Maps extends React.Component {
 	constructor() {
@@ -18,9 +18,9 @@ class Maps extends React.Component {
 			infoVisible: false
 		};
 	}
-	componentWillMount() {
-		this.initData();
-	}
+	componentDidMount() {
+    this.initData();
+  }
 	async initData() {
 		let deviceId = '';
 		const res = await getStationList({

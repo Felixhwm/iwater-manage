@@ -1,10 +1,16 @@
+/*
+ * @Author: Huang Weimin 
+ * @Date: 2018-04-11 09:38:09 
+ * @Last Modified by: Huang Weimin
+ * @Last Modified time: 2018-04-11 09:40:36
+ */
 import React from 'react'
 import { withRouter } from 'react-router-dom'
-import '../style/components/menu.scss'
-import { getMenu } from '../api'
-import { getCookie } from '../utils'
+import '@style/components/menu.scss'
+import { getMenu } from '@api'
+import { getCookie } from '@utils'
 import { Menu, Icon } from 'antd';
-const SubMenu = Menu.SubMenu
+const SubMenu = Menu.SubMenu;
 
 class SideMenu extends React.Component {
 	constructor () {

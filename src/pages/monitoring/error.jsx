@@ -1,12 +1,15 @@
 import React from 'react'
-import { getWorkOrderList } from '../../api'
-import { getCookie } from '../../utils'
-import '../../style/pages/error.scss'
+import { bindActionCreators } from 'redux'
+import { addTodo, deleteTodo } from '@/store/actions'
+import { getWorkOrderList } from '@api'
+import { getCookie } from '@utils'
+import '@style/pages/error.scss'
+import { connect } from 'react-redux'
 import { Table, Pagination, Input, Button, Radio } from 'antd';
 const { Column } = Table;
 const Search = Input.Search;
 
-export default class Error extends React.Component {
+class Error extends React.Component {
 	constructor() {
 		super();
 		this.state = {
@@ -16,7 +19,8 @@ export default class Error extends React.Component {
 			page: 1,
 			row: 10,
 			btnGroupVal: null,
-			orderStatu: null
+      orderStatu: null,
+      todoText: ''
 		}
 	}
 	async initData() {
@@ -32,8 +36,8 @@ export default class Error extends React.Component {
       total: res.data.length
     })
 	}
-	componentWillMount() {
-		this.initData();
+	componentDidMount() {
+    this.initData();
 	}
 	keywordSearch = (event) => {
 		let keyword = event.target.value;
@@ -82,7 +86,16 @@ export default class Error extends React.Component {
 		this.setState({
 			orderStatu: e.target.value
 		})
-	}
+  }
+  changeHandle = e => {
+    this.setState({
+			todoText: e.target.value
+		})
+  }
+  addTodo = () => {
+    console.log(this.state.todoText)
+    this.props.addTodo(this.state.todoText)
+  }
 	render() {
 		return (
 			<div className="main">
@@ -120,7 +133,8 @@ export default class Error extends React.Component {
 					bordered
 					pagination={false}
 					size="small"
-					dataSource={this.state.orderList}>
+					dataSource={this.state.orderList}
+          rowKey="fEventid">
 					<Column
 		        title="工单编号"
 		        dataIndex="fEventid"
@@ -158,7 +172,30 @@ export default class Error extends React.Component {
 					onChange={this.pageChangeHandle}
 					onShowSizeChange={this.sizeChangeHandle}
           />
+          <input value={this.state.todoText} onChange={this.changeHandle}/> 
+          <button onClick={this.addTodo}>添加</button>
+          <ul>
+            {
+              this.props.todos.map(item => 
+                <li key={item.id}>
+                  {item.text} 
+                  <span onClick={this.props.deleteTodo}>X</span>
+                </li>
+              )
+            }
+          </ul>
 			</div>
 		)
 	}
 }
+
+const mapStateTypes = state => ({
+  todos: state.todos
+})
+
+const mapDispatchToProps = dispatch => ({
+  addTodo: bindActionCreators(addTodo, dispatch),
+  deleteTodo: bindActionCreators(deleteTodo, dispatch),
+})
+
+export default connect(mapStateTypes,mapDispatchToProps)(Error)

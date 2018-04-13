@@ -1,8 +1,9 @@
 import React from 'react'
-import Routes from '../../route'
-import '../../style/pages/app.scss'
-import Logo from '../../style/imgs/log_app.png'
-import SideMenu from '../../components/menu'
+import Routes from '@/route'
+import '@style/pages/app.scss'
+import Logo from '@style/imgs/log_app.png'
+import SideMenu from '@components/menu'
+import TopHeader from '@components/header'
 import { Layout, Breadcrumb } from 'antd';
 const { Header, Sider, Content } = Layout;
 
@@ -33,7 +34,7 @@ class App extends React.Component {
 	      </Sider>
 	      <Layout>
 	        <Header className="header">
-	        	<div className="top-nav"></div>
+	        	<TopHeader/>
 	        	<Breadcrumb className="breadcrumb">
     	        <Breadcrumb.Item className="fisrt">{this.state.breadcrumb.firstName}</Breadcrumb.Item>
     	        <Breadcrumb.Item className="last">{this.state.breadcrumb.lastName}</Breadcrumb.Item>
