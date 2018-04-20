@@ -1,45 +1,35 @@
 import React from 'react'
 import Routes from '@/route'
 import '@style/pages/app.scss'
-import Logo from '@style/imgs/log_app.png'
-import SideMenu from '@components/menu'
-import TopHeader from '@components/header'
-import { Layout, Breadcrumb } from 'antd';
-const { Header, Sider, Content } = Layout;
+import Sider from '@components/sider/index.jsx'
+import Header from '@components/header'
+import { Layout } from 'antd';
+const { Content } = Layout;
 
 class App extends React.Component {
-	constructor() {
-		super();
-		this.state = {
-			breadcrumb: {
-				firstName: '',
-				lastName: ''
-			}
-		}
+	state = {
+		collapsed: false,
+		clientWidth: document.body.clientWidth
 	}
-	componentWillMount() {
-
-  }
-  changeHandle = (breadcrumb) => {
-  	this.setState({
-			breadcrumb
-		})
-  }
+	componentDidMount() {
+		window.onresize = () => {
+      this.setState({
+        clientWidth: document.body.clientWidth
+      })
+    }
+	}
+	toggle = () => {
+		this.setState({
+				collapsed: !this.state.collapsed,
+		});
+	}
   render() {
+		const isMobile = this.state.clientWidth <= 992;
   	return (
-  		<Layout className="app" style={{height: '100%'}}>
-	      <Sider className="sidebar" width={160}>
-	      	<img src={Logo} alt="logo" className="logo-menu"/>
-	      	<SideMenu onChange={this.changeHandle}/>
-	      </Sider>
-	      <Layout>
-	        <Header className="header">
-	        	<TopHeader/>
-	        	<Breadcrumb className="breadcrumb">
-    	        <Breadcrumb.Item className="fisrt">{this.state.breadcrumb.firstName}</Breadcrumb.Item>
-    	        <Breadcrumb.Item className="last">{this.state.breadcrumb.lastName}</Breadcrumb.Item>
-    	      </Breadcrumb>
-	        </Header>
+  		<Layout className="app" >
+				{!isMobile && <Sider collapsed={this.state.collapsed}/>}
+	      <Layout style={{flexDirection: 'column'}}>
+	        <Header toggle={this.toggle} collapsed={this.state.collapsed} isMobile={isMobile}/>
 	        <Content>
 	        	<Routes/> 
 	        </Content>

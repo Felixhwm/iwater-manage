@@ -1,7 +1,6 @@
 import axios from './axios'
 import qs from 'qs'
-
-let baseUrl = 'http://120.55.36.183:7015';
+export const baseUrl = 'http://120.55.36.183:7015';
 
 export default async(url, params = {}, method = 'POST', isUpload = false) => {
 	url = baseUrl + url;

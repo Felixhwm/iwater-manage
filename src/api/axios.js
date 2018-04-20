@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getCookie } from '../utils'
+import { getStore } from '../utils'
 import { message } from 'antd'
 
 axios.defaults.timeout = 10000;
@@ -14,10 +14,10 @@ axios.interceptors.request.use((config) => {
     return config;
   }
   if (config.method === 'post') {
-    config.data.Authorization = 'Bearer '+getCookie('token');
-    config.data.userid = getCookie('userid');
+    config.data.Authorization = 'Bearer '+getStore('token');
+    config.data.userid = getStore('userid');
   }else if(config.method === 'get') {
-    config.url +=  ('&Authorization=Bearer '+getCookie('token')+'&userid='+getCookie('userid'))
+    config.url +=  ('&Authorization=Bearer '+getStore('token')+'&userid='+getStore('userid'))
   }
   
   return config;

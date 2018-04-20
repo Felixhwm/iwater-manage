@@ -1,7 +1,7 @@
 import React from 'react';
 import md5 from 'js-md5';
 import { login } from '@api'
-import { setCookie } from '@utils'
+import { setStore } from '@utils'
 import '@style/pages/login.scss'
 import { Form, Icon, Input, Button, message } from 'antd';
 const FormItem = Form.Item;
@@ -18,13 +18,13 @@ class LoginForm extends React.Component {
           password: md5(values.password)
         });
         if (res.rspCode === '00') {
-        	setCookie('token', res.token, 1);
-        	setCookie('fRoleid', res.user.fRoleid, 1);
-        	setCookie('userid', res.user.fPid, 1);
-        	setCookie('username', res.user.fName, 1);
-        	setCookie('rolename', res.user.rolename, 1);
-        	setCookie('areaids', res.areaids, 1);
-        	setCookie('fBrno', res.user.fBrno, 1);
+        	setStore('token', res.token);
+        	setStore('fRoleid', res.user.fRoleid);
+        	setStore('userid', res.user.fPid);
+        	setStore('username', res.user.fName);
+        	setStore('rolename', res.user.rolename);
+        	setStore('areaids', res.areaids);
+        	setStore('fBrno', res.user.fBrno);
         	this.props.history.push('/app');
         }else {
         	message.error('用户名或密码错误！');
@@ -66,7 +66,7 @@ class LoginForm extends React.Component {
 	          </Button>
 	        </FormItem>
 				</Form>
-				<span className="text">版权所有 Copyright(C)2017 沪ICP备14022390号 上海碧兰环保技术开发有限公司</span>
+				<span className="text">版权所有 Copyright(C)2015 上海碧兰环保技术开发有限公司</span>
 			</div>
 		)
 	}
