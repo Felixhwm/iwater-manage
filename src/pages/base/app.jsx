@@ -34,6 +34,17 @@ class App extends React.Component {
 	        	<Routes/> 
 	        </Content>
 	      </Layout>
+				{
+					isMobile && (   // 手机端对滚动很慢的处理
+						<style>
+						{`
+							#root{
+								height: auto;
+							}
+						`}
+						</style>
+					)
+				}
 	    </Layout>
   	)
   }

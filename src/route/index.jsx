@@ -13,12 +13,11 @@ import Statistics from '../pages/monitoring/statistics/'
 import Cost from '../pages/expense/cost'
 import Repository from '../pages/service/repository/';
 import Faq from '../pages/service/faq/';
-import Upload from '../pages/service/repository/upload';
 
 export default class Routes extends React.Component {
 	render() {
 		return (
-			<Switch>Index
+			<Switch>
 				<Route exact path="/app/index" component={Index}/>
 		    <Route exact path="/app/monitoring/map" component={Map}/>
 		    <Route exact path="/app/monitoring/error" component={Error} data={{name: '站点信息'}}/>
@@ -28,8 +27,8 @@ export default class Routes extends React.Component {
 		    <Route exact path="/app/monitoring/instantWatch" render={()=><h1>实时监测</h1>}/>
 				<Route exact path="/app/expense/cost" component={Cost}/>
 				<Route exact path="/app/service/faqs" component={Faq}/>
-				<Route exact path="/app/service/respository" component={Repository}/>
-				<Route exact path="/app/service/respository/upload/:type" component={Upload}/>
+				<Route path="/app/service/respository" component={Repository}/>
+				
 		    <Redirect from="/app" to="/app/index"/>
 		  </Switch>
 		)

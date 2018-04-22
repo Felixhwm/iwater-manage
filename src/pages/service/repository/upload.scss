@@ -1,3 +1,57 @@
-.upload {
-
+.video-box {
+  margin-bottom: 20px;
+  position: relative;
+  .video-bg {
+    height: 0;
+    padding-top: 60%;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+  .icon-play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -80%);
+    cursor: pointer;
+  }
+  .video-hot {
+    position: absolute;
+    height: 36px;
+    line-height: 36px;
+    width: 100%;
+    bottom: 38px;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    span {
+      padding-left: 50px;
+      height: 20px;
+      line-height: 20px;
+      display: block;
+      background-repeat: no-repeat;
+      background-position: center center;
+      cursor: pointer;
+      &:first-child {
+        margin-left: -10px;
+      }
+      &:last-child {
+        margin-right: 10px;
+      }
+    }
+}
+  .video-info {
+    height: 38px;
+    line-height: 38px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .icon-del {
+      vertical-align: middle;
+      cursor: pointer;
+    }
+  }
 }
