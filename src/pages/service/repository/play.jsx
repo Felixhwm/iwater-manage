@@ -1,51 +1,166 @@
 import React, { Component } from 'react'
-import { Col, Row, Button, Slider } from 'antd'
+import { Col, Row, Button, Slider, Icon, Popover, Tooltip } from 'antd'
+import { sectToTime } from '@utils'
 import Breadcrumb from '@components/breadcrumb'
-import { getStore } from '@utils'
+import { getStore, launchFullscreen } from '@utils'
 
 export default class Play extends Component {
   constructor(props) {
     super(props)
     this.state = {
       video: '',
+      controlShow: false,
+      isFullScreen: false,
       videoInfo: {},
       controlInfo: {
+        playing: false, 
         value: 0,
-        tipFormatter: ''
+        tipFormatter: '',
+        duration: null,
+        totalTime: '',
+        nowTime: '',
+        volume: 100
+      },
+      controlToolShow: {
+        soundShow: false,
+        setting: false
       }
     }
   }
   
   componentDidMount() {
     const video = document.getElementById('video');
+    const { controlInfo } = this.state;
     this.setState({
       video,
       videoInfo: getStore('data', true)
     })
+    video.addEventListener('canplaythrough',() => {
+      controlInfo.duration = Math.floor(video.duration);
+      controlInfo.totalTime = sectToTime(controlInfo.duration);
+      this.setState({
+        controlInfo
+      })
+    });
+    video.addEventListener('timeupdate', () => {
+      const { controlInfo } = this.state;
+      controlInfo.value = video.currentTime;
+      controlInfo.nowTime = sectToTime(controlInfo.value);
+      if ( video.currentTime === video.duration ) {
+        controlInfo.value = 0;
+      }
+      this.setState({
+        controlInfo
+      });
+    });
+    document.addEventListener('webkitfullscreenchange', () => {
+      this.setState({
+        isFullScreen: !this.state.isFullScreen
+      })
+    })
+  }
+  triggerControl(type, e) {
+    if(type) {
+      this.setState({
+        controlShow: true
+      });
+    }
+    setTimeout(() => {
+      this.setState({
+        controlShow: false
+      })
+    },3000)
+  }
+  changeStatus = () => {
+    const { video } = this.state;
+    if (video.paused) 
+      return video.play();
+    return video.pause();
+  }
+  changeProgress = (value) => {
+    const { video } = this.state;
+    video.currentTime = value;
+  }
+  setVolume = (volume) => {
+    const { controlInfo, video } = this.state;
+    video.volume = Math.floor(volume/100);
+    controlInfo.volume = volume;
+    this.setState({
+      controlInfo
+    })
+  }
+  
+  fullScreen = () => {
+    if(this.state.isFullScreen) {
+      launchFullscreen();
+    }else {
+      const videoBox = document.getElementsByClassName('video-container')[0];
+      launchFullscreen(videoBox);
+    }
   }
   back = () => {
     this.props.history.replace('/app/service/respository')
   }
   render() {
-    const { readPath, fileName } = this.state.videoInfo;
-    const { value, tipFormatter } = this.state.controlInfo;
+    const isMobile = /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent);
+    const { video, isFullScreen, controlShow } = this.state;
+    const { readPath, fileName, picName } = this.state.videoInfo;
+    const { playing, value, tipFormatter, duration, totalTime, nowTime, volume } = this.state.controlInfo;
     return (
       <div>
         <Breadcrumb first="服务中心" second="知识库">
           <Button type="primary" onClick={this.back}>返回</Button>
         </Breadcrumb>
         <Row type="flex" justify="center">
-          <Col span={22}>
-            <video src={ readPath+fileName  || ''} id="video" className="video"></video>
-            <div className="control-bar">
-              <Slider defaultValue={value} tipFormatter={tipFormatter}/>
-            </div>
-            <style>{`
-              .video {
-                width: 100%;
-                background-color: #000;
+          <Col xxl={18} xl={18 }lg={18} md={18} sm={24} xs={24}>
+            <div 
+              className="video-container" 
+              style={{backgroundColor: isFullScreen ? '#000' : '#fff'}}
+              onMouseOver={this.triggerControl.bind(this, true)}
+              onMouseMove={this.triggerControl.bind(this, true)}
+              onMouseLeave={this.triggerControl.bind(this, false)}>
+              <video  
+                //playsInline={true} 
+                src={ readPath+fileName  || ''}
+                id="video" 
+                className="video"
+                preload="load"
+                poster={readPath+picName || ''}
+                autoPlay={playing} 
+                currenttime={value}
+                controls={isMobile}
+                width="100%">
+              </video>
+              {
+                !isMobile && controlShow &&
+                <div className="control-bar">
+                  <Slider defaultValue={0} value={value} tipFormatter={tipFormatter} max={duration} onChange={this.changeProgress}/>
+                  <div className="control flex_ca">
+                    <div>
+                      <Icon 
+                        style={{fontSize: 30,cursor: 'pointer'}} 
+                        type={video.paused ? 'play-circle-o' : 'pause-circle-o'} 
+                        onClick={this.changeStatus}/>
+                      <span style={{marginLeft: 20}}>{nowTime} / {totalTime}</span>
+                    </div>
+                    <div>
+                      <Popover trigger="click" content={(
+                        <Slider vertical defaultValue={volume} style={{height: 100}} onChange={this.setVolume}/>
+                      )}>
+                        <Icon type="sound" style={{cursor: 'pointer', fontSize: 20}}/>
+                      </Popover>
+                      <Icon type="setting" style={{cursor: 'pointer', fontSize: 20, marginLeft: 20}}/>
+                      <Tooltip title="全屏">
+                        <Icon 
+                          type={isFullScreen ? 'shrink' : 'arrows-alt'} 
+                          style={{cursor: 'pointer', fontSize: 20, marginLeft: 20}} 
+                          onClick={this.fullScreen}/>
+                      </Tooltip>
+                    </div>
+                  </div>
+                </div>
               }
-            `}</style>
+            </div>
           </Col>
         </Row>
         

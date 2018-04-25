@@ -55,3 +55,60 @@
     }
   }
 }
+
+.video-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  .video {
+    display: inline;
+  }
+  .control-bar {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    background-color: rgba(0,0,0,0.4);
+    color: #fff;
+    .ant-slider {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+.control {
+  padding: 0 20px 5px;
+  div > *{
+    display: inline-block;
+    line-height: 30px;
+    vertical-align: top;
+  }
+} 
+.control-resize {
+  width: 18px;
+  height: 18px;
+  background: url('../../../style/imgs/resize.png') no-repeat center center;
+}
+.ant-popover-inner-content {
+  padding: 12px 0;
+}
+video::-webkit-media-controls,
+video::-moz-media-controls,
+video::-webkit-media-controls-enclosure{
+  display:none !important;
+}
+
+video::-webkit-media-controls-panel,
+video::-webkit-media-controls-panel-container,
+video::-webkit-media-controls-start-playback-button {
+  display:none !important;
+  -webkit-appearance: none;
+}
+:-webkit-full-screen video {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+ }
+.center-pause-btn {
+  position: absolute;
+  
+}
