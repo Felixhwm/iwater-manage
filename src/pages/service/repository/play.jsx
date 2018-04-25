@@ -9,7 +9,7 @@ export default class Play extends Component {
     super(props)
     this.state = {
       video: '',
-      controlShow: false,
+      controlShow: true,
       isFullScreen: false,
       videoInfo: {},
       controlInfo: {
@@ -27,10 +27,9 @@ export default class Play extends Component {
       }
     }
   }
-  
   componentDidMount() {
     const video = document.getElementById('video');
-    const { controlInfo } = this.state;
+    const { controlInfo, isFullScreen } = this.state;
     this.setState({
       video,
       videoInfo: getStore('data', true)
@@ -55,21 +54,36 @@ export default class Play extends Component {
     });
     document.addEventListener('webkitfullscreenchange', () => {
       this.setState({
-        isFullScreen: !this.state.isFullScreen
-      })
-    })
+        isFullScreen: !this.state.isFullScreen,
+        controlShow: true
+      });
+    });
+    
+    
   }
   triggerControl(type, e) {
-    if(type) {
+    const { controlShow, isFullScreen } = this.state;
+    if (type === 'enter') {
       this.setState({
         controlShow: true
       });
-    }
-    setTimeout(() => {
+    } else if(type === 'move' && isFullScreen) {
+      console.log(1)
+      clearTimeout(this.timer);
+      this.setState({
+        controlShow: true
+      }, () => {
+        this.timer = setTimeout(() => {
+          this.setState({
+            controlShow: false
+          })
+        }, 3000);
+      }) 
+    }else if(type === 'leave'){
       this.setState({
         controlShow: false
-      })
-    },3000)
+      });
+    }
   }
   changeStatus = () => {
     const { video } = this.state;
@@ -91,10 +105,10 @@ export default class Play extends Component {
   }
   
   fullScreen = () => {
+    const videoBox = document.getElementsByClassName('video-container')[0];
     if(this.state.isFullScreen) {
       launchFullscreen();
     }else {
-      const videoBox = document.getElementsByClassName('video-container')[0];
       launchFullscreen(videoBox);
     }
   }
@@ -116,9 +130,9 @@ export default class Play extends Component {
             <div 
               className="video-container" 
               style={{backgroundColor: isFullScreen ? '#000' : '#fff'}}
-              onMouseOver={this.triggerControl.bind(this, true)}
-              onMouseMove={this.triggerControl.bind(this, true)}
-              onMouseLeave={this.triggerControl.bind(this, false)}>
+              onMouseOver={this.triggerControl.bind(this, 'enter')}
+              onMouseMove={this.triggerControl.bind(this, 'move')}
+              onMouseLeave={this.triggerControl.bind(this, 'leave')}>
               <video  
                 //playsInline={true} 
                 src={ readPath+fileName  || ''}

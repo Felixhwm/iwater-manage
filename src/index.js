@@ -12,6 +12,9 @@ import registerServiceWorker from './registerServiceWorker';
 import { Provider } from 'react-redux'
 import store from './store'
 
+import fastclick from 'fastclick'
+fastclick.attach(document.body)
+
 const render = Component => {
   ReactDOM.render(
   	<LocaleProvider locale={zhCN}>
