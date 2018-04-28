@@ -26,7 +26,7 @@ export default class Routes extends React.Component {
 		    <Route exact path="/app/monitoring/statistics" component={Statistics}/>
 		    <Route exact path="/app/monitoring/instantWatch" render={()=><h1>实时监测</h1>}/>
 				<Route exact path="/app/expense/cost" component={Cost}/>
-				<Route exact path="/app/service/faqs" component={Faq}/>
+				<Route path="/app/service/faqs" component={Faq}/>
 				<Route path="/app/service/respository" component={Repository}/>
 				
 		    <Redirect from="/app" to="/app/index"/>

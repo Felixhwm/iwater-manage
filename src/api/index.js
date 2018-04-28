@@ -13,6 +13,12 @@ export const getWorkOrderList = params => fetch('/table/workorder/selectByPrimar
 //获取区域菜单
 export const getAreaList = params => fetch('/web', params, 'POST');
 //获取知识库列表
-export const getRepositoryList = params => fetch('/knowledge/list', params, 'POST')
+export const getRepositoryList = params => fetch('/knowledge/list', params, 'POST');
 //获取知识库类型列表
-export const getRepositoryTypeList = params => fetch('/knowledge/type/list', params, 'POST')
+export const getRepositoryTypeList = params => fetch('/knowledge/type/list', params, 'POST');
+//提问
+export const addQuestion = params=> fetch('/chat/addQuestion', params, 'POST');
+//获取提问列表
+export const getQuestionList = params => fetch('/chat/getQuestionList', params, 'POST');
+//获取对话详情
+export const getQuestionDetail = params => fetch('/chat/getQuestionDetail', params, 'POST');

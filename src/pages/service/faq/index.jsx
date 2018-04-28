@@ -1,10 +1,15 @@
 import React, { Component } from 'react'
+import { Route } from 'react-router-dom'
+import './index.scss'
+import List from '@pages/service/faq/list';
+import Detail from '@pages/service/faq/detail';
 
-export default class Faq extends Component {
+export default class Index extends Component {
   render() {
     return (
       <div>
-        <h1>faq</h1>
+        <Route exact path="/app/service/faqs" component={List}/>
+				<Route exact path="/app/service/faqs/detail/:faqId" component={Detail}/>
       </div>
     )
   }

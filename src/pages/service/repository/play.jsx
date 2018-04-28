@@ -12,15 +12,6 @@ export default class Play extends Component {
       controlShow: true,
       isFullScreen: false,
       videoInfo: {},
-      controlInfo: {
-        playing: false, 
-        value: 0,
-        tipFormatter: '',
-        duration: null,
-        totalTime: '',
-        nowTime: '',
-        volume: 100
-      },
       controlToolShow: {
         soundShow: false,
         setting: false
@@ -29,60 +20,41 @@ export default class Play extends Component {
   }
   componentDidMount() {
     const video = document.getElementById('video');
-    const { controlInfo, isFullScreen } = this.state;
+    const videoInfo = getStore('data', true)
     this.setState({
       video,
-      videoInfo: getStore('data', true)
+      videoInfo
     })
-    video.addEventListener('canplaythrough',() => {
-      controlInfo.duration = Math.floor(video.duration);
-      controlInfo.totalTime = sectToTime(controlInfo.duration);
-      this.setState({
-        controlInfo
-      })
-    });
-    video.addEventListener('timeupdate', () => {
-      const { controlInfo } = this.state;
-      controlInfo.value = video.currentTime;
-      controlInfo.nowTime = sectToTime(controlInfo.value);
-      if ( video.currentTime === video.duration ) {
-        controlInfo.value = 0;
-      }
-      this.setState({
-        controlInfo
-      });
-    });
     document.addEventListener('webkitfullscreenchange', () => {
       this.setState({
         isFullScreen: !this.state.isFullScreen,
         controlShow: true
       });
     });
-    
-    
   }
   triggerControl(type, e) {
-    const { controlShow, isFullScreen } = this.state;
+    const { video, isFullScreen } = this.state;
+    const controlHide = () => {
+      this.timer = setTimeout(() => {
+        this.setState({
+          controlShow: false
+        })
+      }, 3000);
+    };
+    clearTimeout(this.timer);
     if (type === 'enter') {
       this.setState({
         controlShow: true
       });
     } else if(type === 'move' && isFullScreen) {
-      console.log(1)
-      clearTimeout(this.timer);
+      if(video.paused) return
       this.setState({
         controlShow: true
       }, () => {
-        this.timer = setTimeout(() => {
-          this.setState({
-            controlShow: false
-          })
-        }, 3000);
+        controlHide();
       }) 
-    }else if(type === 'leave'){
-      this.setState({
-        controlShow: false
-      });
+    }else if(type === 'leave' && !video.paused){
+      controlHide();
     }
   }
   changeStatus = () => {
@@ -93,15 +65,13 @@ export default class Play extends Component {
   }
   changeProgress = (value) => {
     const { video } = this.state;
-    video.currentTime = value;
+    video.currentTime = video.duration*(value/100);
   }
   setVolume = (volume) => {
-    const { controlInfo, video } = this.state;
-    video.volume = Math.floor(volume/100);
-    controlInfo.volume = volume;
-    this.setState({
-      controlInfo
-    })
+    console.log(volume)
+    const { video } = this.state;
+    video.volume = volume/100;
+    console.log(video.volume)
   }
   
   fullScreen = () => {
@@ -119,7 +89,8 @@ export default class Play extends Component {
     const isMobile = /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent);
     const { video, isFullScreen, controlShow } = this.state;
     const { readPath, fileName, picName } = this.state.videoInfo;
-    const { playing, value, tipFormatter, duration, totalTime, nowTime, volume } = this.state.controlInfo;
+    const nowTime = sectToTime(video.currentTime);
+    const totalTime = sectToTime(video.duration);
     return (
       <div>
         <Breadcrumb first="服务中心" second="知识库">
@@ -140,15 +111,13 @@ export default class Play extends Component {
                 className="video"
                 preload="load"
                 poster={readPath+picName || ''}
-                autoPlay={playing} 
-                currenttime={value}
                 controls={isMobile}
                 width="100%">
               </video>
               {
                 !isMobile && controlShow &&
                 <div className="control-bar">
-                  <Slider defaultValue={0} value={value} tipFormatter={tipFormatter} max={duration} onChange={this.changeProgress}/>
+                  <Slider defaultValue={0} tipFormatter={null} onChange={this.changeProgress}/>
                   <div className="control flex_ca">
                     <div>
                       <Icon 
@@ -159,9 +128,9 @@ export default class Play extends Component {
                     </div>
                     <div>
                       <Popover trigger="click" content={(
-                        <Slider vertical defaultValue={volume} style={{height: 100}} onChange={this.setVolume}/>
+                        <Slider vertical defaultValue={100} style={{height: 100}} onChange={this.setVolume}/>
                       )}>
-                        <Icon type="sound" style={{cursor: 'pointer', fontSize: 20}}/>
+                        <Icon type={video.volume===0?'close':'sound'} style={{cursor: 'pointer', fontSize: 20}}/>
                       </Popover>
                       <Icon type="setting" style={{cursor: 'pointer', fontSize: 20, marginLeft: 20}}/>
                       <Tooltip title="全屏">
