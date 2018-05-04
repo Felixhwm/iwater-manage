@@ -1,76 +1,30 @@
 import React from 'react'
-import echarts from 'echarts/lib/echarts'
-import 'echarts/lib/chart/pie';
-
-export default class Pie extends React.Component {
-  componentDidMount() {
-    var myChart = echarts.init(document.getElementById('line'));
-    myChart.setOption({
-      title: {
-          text: '折线图堆叠'
-      },
-      tooltip: {
-          trigger: 'axis'
-      },
-      legend: {
-          data:['邮件营销','联盟广告','视频广告','直接访问','搜索引擎']
-      },
-      grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-      },
-      toolbox: {
-          feature: {
-              saveAsImage: {}
-          }
-      },
-      xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          data: ['周一','周二','周三','周四','周五','周六','周日']
-      },
-      yAxis: {
-          type: 'value'
-      },
-      series: [
-          {
-              name:'邮件营销',
-              type:'line',
-              stack: '总量',
-              data:[120, 132, 101, 134, 90, 230, 210]
-          },
-          {
-              name:'联盟广告',
-              type:'line',
-              stack: '总量',
-              data:[220, 182, 191, 234, 290, 330, 310]
-          },
-          {
-              name:'视频广告',
-              type:'line',
-              stack: '总量',
-              data:[150, 232, 201, 154, 190, 330, 410]
-          },
-          {
-              name:'直接访问',
-              type:'line',
-              stack: '总量',
-              data:[320, 332, 301, 334, 390, 330, 320]
-          },
-          {
-              name:'搜索引擎',
-              type:'line',
-              stack: '总量',
-              data:[820, 932, 901, 934, 1290, 1330, 1320]
-          }
-      ]
-    })
-  }
-  render() {
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label } from 'recharts'
+const data = [
+  {name: 'Page A', uv: 4000, pv: 2400, amt: 2400},
+  {name: 'Page B', uv: 3000, pv: 1398, amt: 2210},
+  {name: 'Page C', uv: 2000, pv: 9800, amt: 2290},
+  {name: 'Page D', uv: 2780, pv: 3908, amt: 2000},
+  {name: 'Page E', uv: 1890, pv: 4800, amt: 2181},
+  {name: 'Page F', uv: 2390, pv: 3800, amt: 2500},
+  {name: 'Page G', uv: 3490, pv: 4300, amt: 2100},
+];
+export default class SimpleLineChart extends React.Component {
+  render () {
     return (
-      <div id="line" style={{ width: 500, height: 250 }}></div>
-    )
+      <ResponsiveContainer width="100%" height={250}>
+        <LineChart data={data}
+            margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+          <XAxis dataKey="name"/>
+          <YAxis/>
+          <Label value="Pages of my website" offset={0} position="insideBottom" />
+          <CartesianGrid strokeDasharray="3 3"/>
+          <Tooltip/>
+          <Legend verticalAlign="top" align="right" height={36}></Legend>
+          <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{r: 8}}/>
+          <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+        </LineChart>
+      </ResponsiveContainer>
+  );
   }
 }

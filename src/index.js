@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader'
 
-import './style/reset.scss';
+import '@style/index.scss';
 import 'antd/dist/antd.css'
 import { LocaleProvider } from 'antd'
 import zhCN from 'antd/lib/locale-provider/zh_CN';

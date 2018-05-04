@@ -1,6 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom';
-import '@style/components/menu.scss'
+//import '@style/components/menu.scss'
 import logo from '@imgs/logo_app.png'
 import { getMenu } from '@api'
 import SiderMenu from './siderMenu'

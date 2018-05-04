@@ -1,52 +1,46 @@
-import React from 'react'
-import echarts from 'echarts/lib/echarts'
-import 'echarts/lib/chart/pie';
+import React from 'react';
+import * as Recharts from 'recharts'
+const { ResponsiveContainer, PieChart, Pie, Cell, Legend } = Recharts;
+const data = [
+  {name: 'Group A', value: 400}, 
+  {name: 'Group B', value: 300},
+  {name: 'Group C', value: 300}, 
+  {name: 'Group D', value: 200}
+];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
-export default class Pie extends React.Component {
-  componentDidMount() {
-    var myChart = echarts.init(document.getElementById('pie'));
-  
-  var option = {
-      title: {
-          text: '污水站情况运行总览',
-          left: 'left'
-      },
-      tooltip : {
-          trigger: 'item',
-          formatter: "{a} <br/>{b} : {c} ({d}%)"
-      },
-      legend: {
-          orient: 'vertical',
-          left: 'left',
-          data: ['正常站点','水质异常站点','设备异常站点']
-      },
-      series : [
-          {
-              name: '站点数量',
-              type: 'pie',
-              radius : '55%',
-              center: ['50%', '60%'],
-              data:[
-                  {value:75, name:'正常站点'},
-                  {value:10, name:'水质异常站点'},
-                  {value:15, name:'设备异常站点'},
-              ],
-              itemStyle: {
-                  emphasis: {
-                      shadowBlur: 10,
-                      shadowOffsetX: 0,
-                      shadowColor: 'rgba(0, 0, 0, 0.5)'
-                  }
-              }
-          }
-      ]
-    };
-  
-    myChart.setOption(option)
-  }
-  render() {
-    return (
-      <div id="pie" style={{ width: 600, height: 300 }}></div>
-    )
+const RADIAN = Math.PI / 180;                    
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+ 	const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x  = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy  + radius * Math.sin(-midAngle * RADIAN);
+ 
+  return (
+    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} 	dominantBaseline="central">
+    	{`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
+
+export default class SimplePieChart extends React.Component {
+	render () {
+  	return (
+      <ResponsiveContainer width="100%" height={300}>
+        <PieChart onMouseEnter={this.onPieEnter}>
+          <Pie
+            data={data} 
+            dataKey="value"
+            labelLine={false}
+            label={renderCustomizedLabel}
+            outerRadius={80} 
+            fill="#8884d8">
+            {
+              data.map((entry, index) => <Cell key={entry.name} fill={COLORS[index % COLORS.length]}/>)
+            }
+          </Pie>
+          <Legend iconSize={10} width={120} height={140} layout='vertical' verticalAlign='middle' align="right" />
+        </PieChart>
+      </ResponsiveContainer>
+    );
   }
 }

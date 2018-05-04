@@ -91,24 +91,36 @@ class Index extends React.Component {
     const { infoData } = this.state;
 		return (
 			<div>
-				<Row gutter={16} className="station-record">
-          <Col md={4}>
-						污水站总数 <span>1111</span> 座
+				<Row gutter={12}>
+          <Col xxl={4} xl={8}lg={8} md={12} sm={12} xs={24}>
+						<div className="station-record" style={{borderColor: '#252F3B'}}>
+							<p>污水站总数 </p><span>1111</span>
+							</div>	
 					</Col>
-					<Col md={4}>
-						已安装监控 <span>233</span> 座
+					<Col xxl={4} xl={8}lg={8} md={12} sm={12} xs={24}>
+						<div className="station-record" style={{borderColor: '#3CC2E9'}}>
+							<p>已安装监控</p> <span>233</span>
+						</div>
 					</Col>
-					<Col md={4}>
-						监控在线 <span>233</span >座
+					<Col xxl={4} xl={8}lg={8} md={12} sm={12} xs={24}>
+						<div className="station-record" style={{borderColor: '#5CBD92'}}>
+							<p>监控在线</p> <span>233</span>
+						</div>
 					</Col>
-					<Col md={4}>
-						监控离线<span>233</span>座
+					<Col xxl={4} xl={8}lg={8} md={12} sm={12} xs={24}>
+						<div className="station-record" style={{borderColor: '#364557'}}>
+							<p>监控离线</p><span>233</span>
+						</div>
 					</Col>
-					<Col md={4}>
-						在线率<span>233</span>座
+					<Col xxl={4} xl={8}lg={8} md={12} sm={12} xs={24}>
+						<div className="station-record" style={{borderColor: '#F3AD3B'}}>
+							<p>在线率</p><span>233</span>
+						</div>
 					</Col>
-					<Col md={4}>
-						故障站点<span>233</span>座
+					<Col xxl={4} xl={8}lg={8} md={12} sm={12} xs={24}>
+						<div className="station-record" style={{borderColor: '#ED5565'}}>
+							<p>故障站点</p><span>233</span>
+						</div>
 					</Col>
 				</Row>
 				<div className="map-box">

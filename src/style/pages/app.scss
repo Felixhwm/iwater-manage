@@ -1,35 +1,3 @@
-.w-100 { width: 100px }
-.w-150 { width: 150px }
-.w-200 { width: 200px }
-.w-250 { width: 250px }
-.w-300 { width: 300px }
-.w-400 { width: 400px }
-.w-500 { width: 500px }
-.mg-v { margin: 0 0 }
-.mg-v-5 { margin: 5px 0 }
-.mg-v-10 { margin: 10px 0 }
-.mg-v-15 { margin: 15px 0 }
-.mg-v-20 { margin: 20px 0 }
-.mg-v-25 { margin: 25px 0 }
-.mg-v-30 { margin: 30px 0 }
-.mg-v-50 { margin: 50px 0 }
-.app {
-	height: 100%;
-	color: #333;
-	font-size: 13px;
-	p {
-		margin: 0;
-	}
-}
-::-webkit-scrollbar {
-	width: 6px;
-	height: 6px;
-}
-
-::-webkit-scrollbar-thumb {
-	border-radius: 4px;
-	background-color: hsla(220,4%,58%,.3);
-}
 .sider {
 	background-color: #293038;
 	.sider-logo {
@@ -40,7 +8,6 @@
 		margin: 0 auto;
 	}	
 }
-
 .header {
 	background-color: #fff;
 	height: 50px;
@@ -48,25 +15,15 @@
 	padding: 0;
 }
 .ant-layout {
-	background-color: #fff;
+	background-color: #F8F8F8;
 	.ant-layout-content {
-		> div {
-			height: 100%;
+		.main {
 			padding: 0 20px;
-			padding-bottom: 30px;
+			.main-content {
+			}
 		}
 	}
 	
-}
-.ant-table-wrapper{
-	background-color: #fff;
-}
-.ant-pagination {
-	text-align: center;
-	margin-top: 15px;
-}
-.ant-btn-sm {
-	font-size: 12px;
 }
 .main {
 	.search-area li{

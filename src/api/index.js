@@ -1,5 +1,7 @@
 import fetch from './request'
 
+//公共
+export const common = params => fetch('/web', params, 'POST');
 //登录
 export const login = params => fetch('/user/login', params, 'POST');
 //获取个人菜单
@@ -22,3 +24,6 @@ export const addQuestion = params=> fetch('/chat/addQuestion', params, 'POST');
 export const getQuestionList = params => fetch('/chat/getQuestionList', params, 'POST');
 //获取对话详情
 export const getQuestionDetail = params => fetch('/chat/getQuestionDetail', params, 'POST');
+
+/***************************管理平台**************************/
+export const getRoleList = params => fetch('/table/userrole/selectByPrimaryKey', params, 'GET')

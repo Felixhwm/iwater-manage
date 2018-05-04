@@ -17,7 +17,7 @@ export default class App extends React.Component {
             line-height: 64px;
             background-color: rgb(242, 248, 252);
             padding: 0 20px;
-            margin: 0 -20px 15px -20px;
+            margin: 0 -20px;
             font-weight: bold; 
           }
           .first { color: #333; font-size: 18px; }

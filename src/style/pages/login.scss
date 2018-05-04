@@ -1,17 +1,16 @@
 .bg {
 	height: 100%;
-	background: url('../imgs/bg.jpg') no-repeat 0 0 ;
-	position: relative;
+	background: url('../imgs/bg.jpg') no-repeat 0 0;
+	background-size: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	.logo-name {
 		position: absolute;
 		left: 0;
 		top: 0;
 	}
 	.login-form {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-    transform: translate(-50%, -50%);
 		width: 330px;
 	  padding: 40px;
 	  border-radius: 10px;
@@ -27,6 +26,15 @@
 	  	margin: 25px auto;
 	  }
 	}
+	.ant-form-item {
+		margin-bottom: 16px;
+	}
+	.ant-form-item-with-help {
+		margin-bottom: 0;
+		.ant-form-explain {
+			font-size: 12px;
+		}
+	}
 	.login-form-forgot {
 	  float: right;
 	}
@@ -37,7 +45,6 @@
 .copy-right{
 	width: 100%;
 	text-align: center;
-	color: #fff;
 	position: absolute;
 	bottom: 7px;
 	text-align: center;
@@ -46,7 +53,4 @@
 		width: 100%;
 		margin-bottom: 5px;
 	}
-}
-.ant-form-item {
-	margin-bottom: 12px;
 }

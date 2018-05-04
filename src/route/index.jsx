@@ -5,14 +5,15 @@ import {
   Route 
 } from 'react-router-dom'
 
-import Index from '../pages/index/'
-import Map from '../pages/monitoring/map/'
-import Error from '../pages/monitoring/error/'
-import Run from '../pages/monitoring/run/'
-import Statistics from '../pages/monitoring/statistics/'
-import Cost from '../pages/expense/cost'
-import Repository from '../pages/service/repository/';
-import Faq from '../pages/service/faq/';
+import Index from '@/pages/index/'
+import Map from '@/pages/monitoring/map/'
+import Error from '@/pages/monitoring/error/'
+import Run from '@/pages/monitoring/run/'
+import Statistics from '@/pages/monitoring/statistics/'
+import Cost from '@/pages/expense/cost'
+import Repository from '@/pages/service/repository/';
+import Faq from '@/pages/service/faq/';
+import Role from '@/pages/manage/role/';
 
 export default class Routes extends React.Component {
 	render() {
@@ -28,7 +29,7 @@ export default class Routes extends React.Component {
 				<Route exact path="/app/expense/cost" component={Cost}/>
 				<Route path="/app/service/faqs" component={Faq}/>
 				<Route path="/app/service/respository" component={Repository}/>
-				
+				<Route exact path="/app/manage/role" component={Role}/>
 		    <Redirect from="/app" to="/app/index"/>
 		  </Switch>
 		)

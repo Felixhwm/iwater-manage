@@ -3,7 +3,9 @@ import qs from 'qs'
 export const baseUrl = 'http://120.55.36.183:7015';
 
 export default async(url, params = {}, method = 'POST', isUpload = false) => {
-	url = baseUrl + url;
+	if(!url.includes('http')) {
+		url = baseUrl + url;
+	}
 	method = method.toUpperCase();
 	if (method === 'GET') {
 		let dataStr = '';

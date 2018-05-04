@@ -14,24 +14,24 @@ const columns = [{
 }];
 const data = [{
   key: '1',
-  name: 'John Brown',
+  name: 'John',
   age: 32,
-  address: 'New York No. 1 Lake Park',
+  address: 'New York ',
 }, {
   key: '2',
-  name: 'Jim Green',
+  name: 'Jim',
   age: 42,
-  address: 'London No. 1 Lake Park',
+  address: 'London',
 }, {
   key: '3',
-  name: 'Joe Black',
+  name: 'Joe',
   age: 32,
-  address: 'Sidney No. 1 Lake Park',
+  address: 'Sidneyk',
 }, {
   key: '4',
-  name: 'Disabled User',
+  name: 'Disabled',
   age: 99,
-  address: 'Sidney No. 1 Lake Park',
+  address: 'Sidney',
 }];
 
 // rowSelection object indicates the need for row selection
@@ -48,9 +48,8 @@ const rowSelection = {
 
 export default class STable extends React.Component {
   render() {
-    return <div>
-        <span style={{display: 'block', color: '#333', fontSize: '15px', fontWeight: 'bold', marginBottom: '10px'}}>表格</span>
-        <Table style={{width: '98%'}} rowSelection={rowSelection} size="small" columns={columns} dataSource={data} />
-      </div>
+    return (
+        <Table style={{width: '100%'}} rowSelection={rowSelection} size="small" columns={columns} dataSource={data} />
+    )
   }
 } 
