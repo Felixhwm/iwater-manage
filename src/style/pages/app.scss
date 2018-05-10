@@ -1,33 +1,24 @@
-.sider {
-	background-color: #293038;
-	.sider-logo {
-		display: block;
-		padding: 10px 0; 
-		cursor: pointer;
-		width: calc( 100% - 30px );
-		margin: 0 auto;
-	}	
-}
-.header {
-	background-color: #fff;
-	height: 50px;
-	line-height: 50px;
-	padding: 0;
-}
+@import '../../components/header/index.scss';
 .ant-layout {
 	background-color: #F8F8F8;
-	.ant-layout-content {
+	 > .ant-layout-content {
+		background-color: #eee;
+		padding: 0 0 0 10px;
+		height: auto;
 		.main {
-			padding: 0 20px;
-			.main-content {
+			height: calc( 100% );
+			.main-handle {
+				margin-bottom: 16px;
+				> div {
+					margin: 4px 0 8px 0;
+				}
+			}
+			.main-container {
+				height: calc( 100% - 50px );
+				background-color: #fff;
+				margin-top: 10px;
+				padding: 20px 30px;
 			}
 		}
-	}
-	
-}
-.main {
-	.search-area li{
-		padding: 15px 0;
-		
 	}
 }

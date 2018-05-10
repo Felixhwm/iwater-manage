@@ -1,36 +1,26 @@
 import { combineReducers, createStore } from 'redux';
+import * as types from './actionTypes'
 
 //state
-const initialState = [
-  { text: 'JavaScript', complete: false, id: 0}
-]
-
-//action-type
-export const ADD_TODO = 'ADD_TODO'
-export const DELETE_TODO = 'DELETE_TODO'
-
-
-const todos = (state = initialState, action) => {
+const initialState = {
+	isMobile: /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent),
+	width: document.body.clientWidth,
+	isSmallScreen:  document.body.clientWidth <= 992
+};
+const size = (state = initialState, action) => {
 	switch(action.type) {
-    case ADD_TODO:
-    console.log(action)
-      return [
-        {
-          id: 2,
-          text: action.text,
-          completed: false   
-        },
-        ...state
-      ]
-    case DELETE_TODO:
-      return state.filter(item => item.id !== action.id)
+    case types.WINDOW_RESIZE: 
+      return {
+				...state,
+				...action.data
+			}
 		default: 
-			return state
+			return { ...state }
 	}
 }
 
 const reducers = combineReducers({ 
-  todos
+  size
 });
 
 export default createStore(reducers)

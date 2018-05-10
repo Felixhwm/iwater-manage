@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import Breadcrumb from '@components/breadcrumb'
-import { getStore } from '@utils'
-import { addQuestion, getQuestionList } from '@api'
+import Breadcrumb from '@/components/breadcrumb/'
+import { getStore } from '@/utils'
+import { addQuestion, getQuestionList } from '@/api'
 import { Row ,Col, Input, Button, Pagination, message } from 'antd'
 
 
@@ -63,7 +63,7 @@ export default class componentName extends Component {
     const { questionList, total, value } = this.state;
     const { limit, pageNum } = this.state.searchData;
     return (
-      <div>
+      <div className="main">
         <Breadcrumb first="服务中心" second="在线答疑">
         </Breadcrumb>
         <Row type="flex" justify="center">

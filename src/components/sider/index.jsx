@@ -1,8 +1,8 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom';
 import './index.scss'
-import logo from '@imgs/logo_app.png'
-import { getMenu } from '@api'
+import { getMenu } from '@/api';
+import { setStore } from '@/utils'
 import Menu from './menu'
 import { Layout } from 'antd';
 const {  Sider } = Layout;
@@ -45,7 +45,9 @@ class app extends React.Component {
     const res = await getMenu();
     this.setState({
       menuList: res.data
-    })
+    });
+    setStore('allMenu', res.data)
+
   }
   onOpenChange = (v) => {
     this.setState({
@@ -82,11 +84,11 @@ class app extends React.Component {
         trigger={null}
         collapsible
         collapsed={this.state.collapsed}>
-          <img src={logo} alt="logo" className="sider-logo" onClick={this.gotoIndex}/>
           <Menu
             data={this.state.menuList}
             rootPath={path}
             mode="inline"
+            theme="dark"
             openKeys={this.state.firstHide ? null : this.state.openKeys}
             selectedKeys={this.state.selectedKeys}
             inlineCollapsed={this.state.collapsed}

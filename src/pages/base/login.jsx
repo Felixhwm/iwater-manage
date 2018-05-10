@@ -38,7 +38,7 @@ class LoginForm extends React.Component {
         	setStore('rolename', res.user.rolename);
         	setStore('areaids', res.areaids);
         	setStore('fBrno', res.user.fBrno);
-        	this.props.history.push('/app/service/respository');
+        	this.props.history.push('/app');
         }else {
         	message.error('用户名或密码错误！');
         }

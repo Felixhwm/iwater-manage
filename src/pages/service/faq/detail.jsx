@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import Breadcrumb from '@components/breadcrumb'
-import { getQuestionDetail } from '@api'
+import Breadcrumb from '@/components/breadcrumb/'
+import { getQuestionDetail } from '@/api'
 import { Row ,Col, Button } from 'antd'
 
 const Text = ({data, show = false, border = true}) => (

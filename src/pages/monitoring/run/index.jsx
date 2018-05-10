@@ -7,7 +7,7 @@ import Table from './table'
 import Line from './line'
 import STable from './sTable'
 import Bar from './bar'
-import Breadcrumb from '@components/breadcrumb'
+import Breadcrumb from '@/components/breadcrumb/'
 import Sider from './tree'
 const { Content }  = Layout
 

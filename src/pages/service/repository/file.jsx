@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { setStore } from '@utils'
+import { setStore } from '@/utils'
 import { Row, Col, Table, Pagination, Button, Divider, Select, Input, Tabs } from 'antd'
-import Breadcrumb from '@components/breadcrumb'
-import { getRepositoryList, getRepositoryTypeList } from '@api'
+import Breadcrumb from '@/components/breadcrumb/'
+import { getRepositoryList, getRepositoryTypeList } from '@/api'
 const { Column } = Table;
 
 export default class File extends Component {
@@ -85,7 +85,7 @@ export default class File extends Component {
     const { repositoryList, total,repositoryTypeList } = this.state;
     const { limit, pageNum, type } = this.state.searchData;
     return (
-      <div>
+      <div className="main">
         <Breadcrumb first="服务中心" second="知识库">
           <Button type="primary" onClick={this.uploadHandle}>上传</Button>
         </Breadcrumb>

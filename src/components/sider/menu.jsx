@@ -9,7 +9,6 @@ export default ({ data, rootPath, ...props }) =>
       key={`${rootPath}/${item.menuUrl}`}
       title={
         <span>
-            <Icon type="mail" />
             <span className="nav-text">{item.menuName}</span>
         </span>
       }>
@@ -17,7 +16,7 @@ export default ({ data, rootPath, ...props }) =>
         item.child && item.child.map(each => 
           <Menu.Item
             key={`${rootPath}/${item.menuUrl}/${each.menuUrl}`}>
-            <span>{ each.menuName }</span>
+            <span><Icon type="mail" />{ each.menuName }</span>
         </Menu.Item>)
       }
     </Menu.SubMenu>)

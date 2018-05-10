@@ -12,6 +12,7 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
+const theme = require('../theme');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -222,7 +223,7 @@ module.exports = {
             // it's runtime that would otherwise processed through "file" loader.
             // Also exclude `html` and `json` extensions so they get processed
             // by webpacks internal loaders.
-            exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/, /\.scss$/],
+            exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/, /\.scss$/, /\.less$/],
             options: {
               name: 'static/media/[name].[hash:8].[ext]',
             },
@@ -230,8 +231,77 @@ module.exports = {
           //load scss
           {
             test: /\.scss$/,
-            loaders: ['style-loader', 'css-loader', 'sass-loader']
-          }
+            use: [
+              require.resolve('style-loader'),
+              ({ resource }) => ({
+                loader: 'css-loader',
+                options: {
+                    importLoaders: 1,
+                    modules: /\.module\.less/.test(resource),
+                    localIdentName: '[name]__[local]___[hash:base64:5]',
+                },
+              }),
+              {
+                loader: 'postcss-loader',
+                options: {
+                  ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
+                  plugins: () => [
+                    require('postcss-flexbugs-fixes'),
+                    autoprefixer({
+                      browsers: [
+                        '>1%',
+                        'last 4 versions',
+                        'Firefox ESR',
+                        'not ie < 9', // React doesn't support IE8 anyway
+                      ],
+                      flexbox: 'no-2009',
+                    }),
+                  ],
+                },
+              },
+              require.resolve('sass-loader')
+            ]
+          },
+          // Parse less files and modify variables
+          {
+            test: /\.less$/,
+            use: [
+              require.resolve('style-loader'),
+              ({ resource }) => ({
+                loader: 'css-loader',
+                options: {
+                    importLoaders: 1,
+                    modules: /\.module\.less/.test(resource),
+                    localIdentName: '[name]__[local]___[hash:base64:5]',
+                },
+              }),
+              {
+                loader: 'postcss-loader',
+                options: {
+                  ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
+                  plugins: () => [
+                    require('postcss-flexbugs-fixes'),
+                    autoprefixer({
+                      browsers: [
+                        '>1%',
+                        'last 4 versions',
+                        'Firefox ESR',
+                        'not ie < 9', // React doesn't support IE8 anyway
+                      ],
+                      flexbox: 'no-2009',
+                    }),
+                  ],
+                },
+              },
+              {
+                loader: require.resolve('less-loader'),
+                options: {
+                  javascriptEnabled: true,
+                  modifyVars: theme,
+                },
+              },
+            ],
+          },
           // ** STOP ** Are you adding a new loader?
           // Make sure to add the new loader(s) before the "file" loader.
         ],

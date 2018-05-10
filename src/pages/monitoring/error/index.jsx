@@ -1,10 +1,7 @@
 import React from 'react'
-import { bindActionCreators } from 'redux'
-import { addTodo, deleteTodo } from '@/store/actions'
-import { getWorkOrderList } from '@api'
-import { getStore } from '@utils'
+import { getWorkOrderList } from '@/api'
+import { getStore } from '@/utils'
 import '@style/pages/error.scss'
-import { connect } from 'react-redux'
 import { Table, Pagination, Input, Button, Radio } from 'antd';
 const { Column } = Table;
 const Search = Input.Search;
@@ -189,13 +186,4 @@ class Error extends React.Component {
 	}
 }
 
-const mapStateTypes = state => ({
-  todos: state.todos
-})
-
-const mapDispatchToProps = dispatch => ({
-  addTodo: bindActionCreators(addTodo, dispatch),
-  deleteTodo: bindActionCreators(deleteTodo, dispatch),
-})
-
-export default connect(mapStateTypes,mapDispatchToProps)(Error)
+export default Error

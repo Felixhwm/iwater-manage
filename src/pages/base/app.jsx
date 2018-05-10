@@ -1,23 +1,15 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import Routes from '@/route'
 import '@style/pages/app.scss'
 import Sider from '@components/sider/index.jsx'
-import Header from '@components/header'
+import Header from '@/components/header/'
 import { Layout, BackTop } from 'antd';
-import { Scrollbars } from 'react-custom-scrollbars';
 const { Content } = Layout;
 
 class App extends React.Component {
 	state = {
-		collapsed: false,
-		clientWidth: document.body.clientWidth
-	}
-	componentDidMount() {
-		window.onresize = () => {
-      this.setState({
-        clientWidth: document.body.clientWidth
-      })
-    }
+		collapsed: false
 	}
 	toggle = () => {
 		this.setState({
@@ -25,25 +17,38 @@ class App extends React.Component {
 		});
 	}
   render() {
-		const isMobile = this.state.clientWidth <= 992;
+		const { isSmallScreen } = this.props.size;
   	return (
   		<Layout style={{height: '100%'}}>
-				{!isMobile && <Sider collapsed={this.state.collapsed}/>}
-	      <Layout style={{flexDirection: 'column'}}>
-	        <Header toggle={this.toggle} collapsed={this.state.collapsed} isMobile={isMobile}/>
-	        <Content>
-						<Scrollbars style={{height: 'calc( 100vh - 50px)'}}>
-							<Routes/> 
-						</Scrollbars>
-						<BackTop/>
-	        </Content>
-	      </Layout>
+				<Header toggle={this.toggle} collapsed={this.state.collapsed}/>
+					<Layout>
+						{!isSmallScreen && <Sider collapsed={this.state.collapsed}/>}
+						<Layout>
+							<Content>
+									<Routes/> 
+								<BackTop/>
+							</Content>
+						</Layout>
+					</Layout>
 				{
-					isMobile && (   // 手机端对滚动很慢的处理
+					isSmallScreen && (   // 手机端对滚动很慢的处理 //flex布局模式改变
 						<style>
 						{`
 							#root{
 								height: auto;
+							}
+							.ant-layout.ant-layout-has-sider {
+								flex-direction: column;
+							}
+							.header,
+							.ant-layout .ant-layout-content {
+								padding: 0;
+							}
+							.main-container {
+								padding: 10px!important;
+							}
+							.header-logo {
+								display: none;
 							}
 						`}
 						</style>
@@ -54,4 +59,6 @@ class App extends React.Component {
   }
 }
 
-export default App
+const mapStateToProps = state => state
+
+export default connect(mapStateToProps)(App)

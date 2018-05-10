@@ -61,6 +61,8 @@
     "test": "node scripts/test.js --env=jsdom"
   },
   "devDependencies": {
+    "less": "^3.0.4",
+    "less-loader": "^4.1.0",
     "node-sass": "^4.8.3",
     "react-hot-loader": "^4.0.0",
     "sass-loader": "^6.0.7"

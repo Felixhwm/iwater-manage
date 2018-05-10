@@ -1,9 +1,9 @@
 import React from 'react'
 import { Map, Marker, InfoWindow } from 'react-amap'
 import '@style/pages/map.scss'
-import { getStationList, getStationStatu } from '@api'
-import { getCookie } from '@utils'
-import Breadcrumb from '@components/breadcrumb'
+import { getStationList, getStationStatu } from '@/api'
+import { getCookie } from '@/utils'
+import Breadcrumb from '@/components/breadcrumb/'
 
 class Maps extends React.Component {
 	constructor() {

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Col, Row, Button, Slider, Icon, Popover, Tooltip } from 'antd'
 import { sectToTime } from '@utils'
-import Breadcrumb from '@components/breadcrumb'
-import { getStore, launchFullscreen } from '@utils'
+import Breadcrumb from '@/components/breadcrumb/'
+import { getStore, launchFullscreen } from '@/utils'
 
 export default class Play extends Component {
   constructor(props) {
