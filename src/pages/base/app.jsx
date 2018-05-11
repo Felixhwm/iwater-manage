@@ -16,39 +16,45 @@ class App extends React.Component {
 				collapsed: !this.state.collapsed,
 		});
 	}
+	componentDidMount() {
+		if (!!window.Notification) {
+			Notification.requestPermission();
+			this.sendMessage();
+		}else {
+			console.log('不支持Notification');
+		}
+	}
+	sendMessage = async() => {
+		if (Notification.permission === "granted") {
+			new Notification("winme", {
+					body: '欢迎浏览~',
+					icon: require('../../style/imgs/winme.jpg')
+			});
+		}
+	}
   render() {
-		const { isSmallScreen } = this.props.size;
+		const { isSmallScreen, isMobile } = this.props.size;
   	return (
-  		<Layout style={{height: '100%'}}>
-				<Header toggle={this.toggle} collapsed={this.state.collapsed}/>
+  		<Layout style={{'flexDirection': isSmallScreen && 'column', height: '100%'}}>
+				<Header toggle={this.toggle} collapsed={this.state.collapsed} style={{padding: isSmallScreen && '10px 0'}}/>
+				<Layout>
+					{!isMobile && <Sider collapsed={this.state.collapsed}/>}
 					<Layout>
-						{!isSmallScreen && <Sider collapsed={this.state.collapsed}/>}
-						<Layout>
-							<Content>
-									<Routes/> 
-								<BackTop/>
-							</Content>
-						</Layout>
+						<Content style={{padding: isSmallScreen && 0}}>
+								<Routes/> 
+							<BackTop/>
+						</Content>
 					</Layout>
+				</Layout>
 				{
-					isSmallScreen && (   // 手机端对滚动很慢的处理 //flex布局模式改变
+					isMobile && (   // 手机端对滚动很慢的处理 //flex布局模式改变
 						<style>
 						{`
 							#root{
-								height: auto;
-							}
-							.ant-layout.ant-layout-has-sider {
-								flex-direction: column;
-							}
-							.header,
-							.ant-layout .ant-layout-content {
-								padding: 0;
+								height: auto!important;
 							}
 							.main-container {
 								padding: 10px!important;
-							}
-							.header-logo {
-								display: none;
 							}
 						`}
 						</style>

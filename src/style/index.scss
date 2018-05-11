@@ -29,7 +29,10 @@ body {
 		margin: 0;
 	}
 }
-
+.ant-table-thead > tr > th {
+  background-color: #BDDCF8!important;
+  font-weight: bold;
+}
 .ant-table .span {
 	color: $theme-color!important;
 	cursor: pointer!important;
@@ -39,6 +42,29 @@ body {
 	margin-top: 15px!important;
 }
 .ant-btn {
-	font-size: 14px!important;
 	height: 34px!important;
+	font-size: 14px!important;
+	height: 34px;
+	> i {
+		display: inline-block;
+		width: 18px;
+		height: 18px;
+		margin-right: 2px;
+		vertical-align: sub;
+	}
+	span {
+		vertical-align: text-bottom;
+	}
 }	
+.ant-input {
+	height: 34px!important;
+}
+// ::-webkit-scrollbar {
+// 	width: 6px;
+// 	height: 6px;
+// }
+
+// ::-webkit-scrollbar-thumb {
+// 	border-radius: 4px;
+// 	background-color: hsla(220,4%,58%,.3);
+// }

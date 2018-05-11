@@ -72,7 +72,7 @@ class Role extends Component {
           tradeCode: 'userrole.deleteByPrimaryKey',
           fRoleid
         }); 
-        this.message.success('删除成功！');
+        message.success('删除成功！');
         this.initData();
       }
     });
@@ -82,7 +82,7 @@ class Role extends Component {
   }
   render() {
     const { visible, roleList, rowData, total } = this.state;
-    const { isMobile ,width } = this.props.size;
+    const { isMobile, isSmallScreen, width } = this.props.size;
     const { pageNum, limit } = this.state.searchData;
     return (
       <div className="main">
@@ -90,13 +90,20 @@ class Role extends Component {
         <div className="main-container">
           <Row className="main-handle" type="flex" justify="space-between">
             <Col xxl={10} xl={10}lg={12} md={12} sm={24} xs={24}>
-              <Button type="primary" onClick={() => this.showModal()}>添加</Button>
-              <Button type="primary" onClick={this.deleteHandle} style={{ marginLeft: 20 }}>删除</Button>
-              <Button type="primary" style={{ marginLeft: 20 }}>导出</Button>
+              <Button type="primary" onClick={() => this.showModal()} style={{width: 80}}>
+                <i style={{backgroundImage: `url(${require('./img/add.png')})`}}/> 添加
+              </Button>
+              <Button type="primary" onClick={this.deleteHandle} style={{ marginLeft: 20, width: 80 }}>
+                <i style={{backgroundImage: `url(${require('./img/del.png')})`}}/> 删除
+                </Button>
+              <Button type="primary" style={{ marginLeft: 20, width: 80 }}>
+                <i style={{backgroundImage: `url(${require('./img/export.png')})`}}/>导出
+              </Button>
             </Col>
             <Col xxl={10} xl={10}lg={12} md={12} sm={24} xs={24} style={{textAlign: width >768 && 'right'}}>
-              <Input.Search style={{ width: 250 }} className="item"/>
-              <Button type="primary" style={{ marginLeft: 20 }}>搜索</Button>
+              <Input.Search 
+                placeholder="输入内容以搜索"
+                style={{ height: '100%', width: isSmallScreen ? '100%' : 270 }}/>
             </Col>
           </Row>
           <Table 
@@ -109,7 +116,7 @@ class Role extends Component {
             <Table.Column title="角色名称" dataIndex="fName"></Table.Column>
             <Table.Column title="角色代码" dataIndex="fRoleid"></Table.Column>
             <Table.Column title="角色类型" dataIndex="fTypename"></Table.Column>
-            <Table.Column title="操作" width="100px" render={(text, record) => (
+            <Table.Column title="操作" width="90px" fixed="right" render={(text, record) => (
               <span className="span" onClick={() => this.showModal(record)}>
                 查看详情
               </span>

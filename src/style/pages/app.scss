@@ -2,22 +2,18 @@
 .ant-layout {
 	background-color: #F8F8F8;
 	 > .ant-layout-content {
-		background-color: #eee;
 		padding: 0 0 0 10px;
 		height: auto;
 		.main {
-			height: calc( 100% );
 			.main-handle {
-				margin-bottom: 16px;
 				> div {
-					margin: 4px 0 8px 0;
+					margin-bottom: 16px;
 				}
 			}
 			.main-container {
-				height: calc( 100% - 50px );
 				background-color: #fff;
 				margin-top: 10px;
-				padding: 20px 30px;
+				padding: 26px 30px;
 			}
 		}
 	}

@@ -18,30 +18,15 @@ class app extends React.Component {
       firstHide: false,
     }
   }
-  find(str,cha,num){
-    var x=str.indexOf(cha);
-    for(var i=0;i<num;i++){
-        x=str.indexOf(cha,x+1);
-    }
-    return x;
+  componentDidMount() {
+    this.initData();
+    this.setMenuOpen(this.props);
   }
   componentWillReceiveProps(nextProps) {
-    let { pathname } = nextProps.location;
-    if (pathname.split('/').length  > 4) {
-      pathname = pathname.substring(0, this.find(pathname, '/', 3))
-    }
-    let { collapsed } = nextProps;
-    this.setState({
-      openKeys: [pathname.substr(0, pathname.lastIndexOf('/'))],
-      selectedKeys: [pathname],
-      collapsed,
-      firstHide: collapsed
-    });
+    this.onCollapse(nextProps.collapsed);
+    this.setMenuOpen(nextProps);
   }
-	componentDidMount() {
-    this.initData();
-  }
-  async initData() {
+  initData = async() => {
     const res = await getMenu();
     this.setState({
       menuList: res.data
@@ -49,6 +34,30 @@ class app extends React.Component {
     setStore('allMenu', res.data)
 
   }
+  setMenuOpen = props => {
+    const find = (str,cha,num) => {
+      var x=str.indexOf(cha);
+      for(var i=0;i<num;i++){
+          x=str.indexOf(cha,x+1);
+      }
+      return x;
+    }
+    let { pathname } = props.location;
+    if (pathname.split('/').length  > 4) {
+      pathname = pathname.substring(0, find(pathname, '/', 3))
+    }
+    this.setState({
+      openKeys: [pathname.substr(0, pathname.lastIndexOf('/'))],
+      selectedKeys: [pathname],
+    });
+  }
+  onCollapse = collapsed => {
+    this.setState({
+        collapsed,
+        firstHide: collapsed,
+    });
+  };
+	
   onOpenChange = (v) => {
     this.setState({
       openKeys: [v.pop()],

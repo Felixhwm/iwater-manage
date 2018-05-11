@@ -26,4 +26,7 @@ export const getQuestionList = params => fetch('/chat/getQuestionList', params, 
 export const getQuestionDetail = params => fetch('/chat/getQuestionDetail', params, 'POST');
 
 /***************************管理平台**************************/
+//获取职位列表
 export const getRoleList = params => fetch('/table/userrole/selectByPrimaryKey', params, 'GET')
+//获取人员列表
+export const getUserList = params => fetch('/table/user/selectByPrimaryKey', params, 'GET')

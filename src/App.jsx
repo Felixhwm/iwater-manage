@@ -19,7 +19,7 @@ class component extends React.Component {
       width: document.body.clientWidth,
       isSmallScreen:  document.body.clientWidth <= 992
     };
-		this.props.windowResize(data);
+    this.props.windowResize(data);
 	}
   render() {
     return ( 
@@ -28,19 +28,6 @@ class component extends React.Component {
           <Route exact path="/" render={() => <Redirect to="/login" push />} />     
           <Route path="/login" component={Login} />   
           <Route path="/app" component={App} />
-          {
-            this.props.size.isMobile && <style>{`
-              ::-webkit-scrollbar {
-              	width: 6px;
-              	height: 6px;
-              }
-              
-              ::-webkit-scrollbar-thumb {
-              	border-radius: 4px;
-              	background-color: hsla(220,4%,58%,.3);
-              }
-            `}</style>
-          }
         </Switch>
       </Router>
     )

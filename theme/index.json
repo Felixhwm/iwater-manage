@@ -1,7 +1,6 @@
 {
   "@primary-color": "#1c7bc3",
   "@menu-item-height": "40px",
-  "@table-header-bg": "#BDDCF8",
   "@table-row-hover-bg": "#EEEEEE",
   "@btn-font-weight": "normal",
   "@btn-font-size-sm": "12px",

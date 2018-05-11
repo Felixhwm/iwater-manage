@@ -38,7 +38,7 @@ class Run extends Component {
     return (
       <div className="main">
         <Breadcrumb first="监控平台" second="地图监控"/>
-        <Layout className="main-content">
+        <Layout className="main-container">
           { !isMobile && <Sider/> }
           <Content>
             <Row gutter={40}>

@@ -14,6 +14,7 @@ import Cost from '@/pages/expense/cost'
 import Repository from '@/pages/service/repository/';
 import Faq from '@/pages/service/faq/';
 import Role from '@/pages/manage/role/';
+import Person from '@/pages/manage/person/'
 
 export default class Routes extends React.Component {
 	render() {
@@ -30,6 +31,7 @@ export default class Routes extends React.Component {
 				<Route path="/app/service/faqs" component={Faq}/>
 				<Route path="/app/service/respository" component={Repository}/>
 				<Route exact path="/app/manage/role" component={Role}/>
+				<Route exact path="/app/manage/person" component={Person}/>
 		    <Redirect from="/app" to="/app/index"/>
 		  </Switch>
 		)

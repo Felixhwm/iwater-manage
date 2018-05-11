@@ -56,6 +56,7 @@ class LoginForm extends React.Component {
 						<img src={require('@imgs/logo_text.jpg')} className="logo2" alt="logo"></img>
 						<FormItem>
 							{getFieldDecorator('name', {
+								initialValue: 'admin',
 								rules: [{ required: true, message: '请输入用户名！' }],
 							})(
 								<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="用户名" />
@@ -63,6 +64,7 @@ class LoginForm extends React.Component {
 						</FormItem>
 						<FormItem>
 							{getFieldDecorator('password', {
+								initialValue: '111111',
 								rules: [{ required: true, message: '请输入密码！' }],
 							})(
 								<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="密码" />
