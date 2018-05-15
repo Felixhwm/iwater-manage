@@ -8,7 +8,7 @@ import Line from './line'
 import STable from './sTable'
 import Bar from './bar'
 import Breadcrumb from '@/components/breadcrumb/'
-import Sider from './tree'
+import Sider from '@/components/stationSelect/'
 const { Content }  = Layout
 
 class Run extends Component {

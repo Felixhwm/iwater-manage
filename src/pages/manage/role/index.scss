@@ -1,53 +1,6 @@
 @import '../../../style/variables.scss';
-.modal {
-  width: 740px!important;
-  .ant-modal-content {
-    border-radius: 16px 16px 8px 8px!important;
-  }
-  .ant-modal-header {
-    border-radius: 8px 8px 0 0;
-    padding: 14px 24px!important;
-    background-color: $theme-color!important;
-    .ant-modal-title {
-      color: #fff!important;
-      font-size: 16px!important;
-      line-height: 16px!important;
-      font-weight: bold!important;
-      text-align: center!important;
-    }
-  }
-  .ant-modal-footer {
-    border: none!important;
-    padding: 4px 16px 30px 16px!important;
-    > div {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      button:last-child {
-        margin-left: 50px;
-      }
-    }
-  }
-  .ant-tree > li {
-    padding: 7px 14px;
-    border: 1px solid #ccc;
-  }
-  .ant-tree > li:not(:last-child) {
-    border-bottom: 0;
-  }
-  .ant-tree li {
-    white-space: pre-wrap;
-    color: #666;
-  }
-  .ant-tree-child-tree li {
-    padding: 4px 14px;
-    display: inline-block;
-  }
-  .ant-tree li span.ant-tree-switcher {
-    width: 0;
-  }
-  
-  .base {
+.form {
+  > ul {
     border: 1px solid #ccc;
     border-bottom: 0;
     // input {
@@ -66,4 +19,19 @@
       }
     }
   }
+}
+.tree > li {
+  padding: 7px 14px;
+  border: 1px solid #ccc;
+  white-space: pre-wrap;
+  color: #666;
+  .ant-tree-child-tree li {
+    padding: 4px 14px;
+    display: inline-block;
+  } li span.ant-tree-switcher {
+    width: 0;
+  }
+}
+.ant-tree > li:not(:last-child) {
+  border-bottom: 0;
 }

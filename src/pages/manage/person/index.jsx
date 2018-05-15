@@ -1,17 +1,22 @@
 import React, { Component } from 'react'
 import Breadcrumb from '@/components/breadcrumb/'
+import MainHanle from '@/components/mainHandle/'
+import Alert from './alert'
 import './index.scss'
-import { Table, Button, Pagination } from 'antd'
-import { getUserList } from '@/api'
+import { Table, Pagination, message, Modal } from 'antd'
+import { getUserList, common } from '@/api'
 
 export default class App extends Component {
   state = {
     personList: [],
     total: null,
     searchData: {
-      limit: 10,
+      limit: 17,
       pageNum: 1
-    }
+    },
+    selectedRowKeys: [],
+    visible: false,
+    rowData: {}
   }
   componentDidMount() {
     this.initData();
@@ -32,13 +37,54 @@ export default class App extends Component {
       this.initData();
     })
   }
+  rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      this.setState({
+        selectedRowKeys
+      })
+    },
+  }
+  deleteHandle = () => {
+    const { selectedRowKeys } = this.state;
+    if(selectedRowKeys.length === 0) {
+      message.warning('请先选中需要删除的行！');
+      return 
+    }
+    Modal.confirm({
+      title: '提示?',
+      content: '您确定要删除选中的所有数据吗？',
+      onOk: async() => {
+        const fPid = selectedRowKeys.reduce((total, num) => total+','+num)
+        await common({
+          tradeCode: 'user.deleteByPrimaryKey',
+          fPid
+        }); 
+        message.success('删除成功！');
+        this.initData();
+      }
+    });
+  }
+  showAlert = (rowData) => {
+    console.log(rowData ? 0 : 1)
+    this.setState({
+      rowData: rowData ? { title: '添加' } : {...rowData, title: '编辑'},
+      visible: true
+    })
+  }
+  AlertTrigger = (ok) => {
+    this.setState({
+      visible: false
+    })
+    if(ok) this.initData();
+  }
   render() {
-    const { personList, total } = this.state;
+    const { personList, total, visible, rowData } = this.state;
     const { pageNum, limit } = this.state.searchData;
     return (
       <div className="main">
         <Breadcrumb first="管理平台" second="人员管理"/>
         <div className="main-container">
+          <MainHanle onAdd={this.showAlert} onDelete={this.deleteHandle}/>
           <Table
             dataSource={personList} 
             // expandedRowRender={record => 
@@ -58,13 +104,13 @@ export default class App extends Component {
             // }
             rowKey="fPid" 
             size="small" 
+            rowSelection={this.rowSelection}
             pagination={false} 
             scroll={{ x: 800 }}>
             <Table.Column title="姓名" dataIndex="fName"/>
             <Table.Column title="所属机构" dataIndex="branchname"/>
             <Table.Column title="角色" dataIndex="rolename"/>
             <Table.Column title="联系手机" dataIndex="fTelephone1"/>
-            <Table.Column title="座机" dataIndex="fTelephone2"/>
             <Table.Column title="责任区域" dataIndex="area_name" render={text => 
               <span dangerouslySetInnerHTML={{__html: text}}></span>
             }/>
@@ -73,6 +119,11 @@ export default class App extends Component {
                 <span className={ `server-statu ${record.fState === '0' ? 'normal' : 'rest'}` }>{text}</span>
               }>
             </Table.Column>
+            <Table.Column title="操作" width="90px" fixed="right" render={(text, record) => (
+              <span className="span" onClick={() => this.showAlert(record)}>
+                查看详情
+              </span>
+            )}/>
           </Table>
           <Pagination
             size="small" showQuickJumper 
@@ -80,6 +131,7 @@ export default class App extends Component {
             showTotal={(total, range) => `共 ${this.state.total} 条`}
             onChange={this.pageChangeHandle}/>
         </div>
+        <Alert visible={visible} data={rowData} trigger={this.AlertTrigger}/>
       </div>
     )
   }

@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import './index.scss'
-import { getRoleList, common } from '@/api';
-import Breadcrumb from '@/components/breadcrumb/';
+import { getRoleList, common } from '@/api'
+import Breadcrumb from '@/components/breadcrumb/'
+import MainHanle from '@/components/mainHandle/'
 import MyModal from './modal'
-import { Row, Col, Table, Button, Input, Pagination, message, Modal } from 'antd'
+import { Table, Pagination, message, Modal } from 'antd'
 
 class Role extends Component {
   state = {
@@ -16,7 +16,7 @@ class Role extends Component {
     total: null,
     searchData: {
       pageNum: 1,
-      limit: 10
+      limit: 18
     },
     selectedRowKeys: []
   }
@@ -82,30 +82,12 @@ class Role extends Component {
   }
   render() {
     const { visible, roleList, rowData, total } = this.state;
-    const { isMobile, isSmallScreen, width } = this.props.size;
     const { pageNum, limit } = this.state.searchData;
     return (
       <div className="main">
         <Breadcrumb first="管理平台" second="角色管理"></Breadcrumb>
         <div className="main-container">
-          <Row className="main-handle" type="flex" justify="space-between">
-            <Col xxl={10} xl={10}lg={12} md={12} sm={24} xs={24}>
-              <Button type="primary" onClick={() => this.showModal()} style={{width: 80}}>
-                <i style={{backgroundImage: `url(${require('./img/add.png')})`}}/> 添加
-              </Button>
-              <Button type="primary" onClick={this.deleteHandle} style={{ marginLeft: 20, width: 80 }}>
-                <i style={{backgroundImage: `url(${require('./img/del.png')})`}}/> 删除
-                </Button>
-              <Button type="primary" style={{ marginLeft: 20, width: 80 }}>
-                <i style={{backgroundImage: `url(${require('./img/export.png')})`}}/>导出
-              </Button>
-            </Col>
-            <Col xxl={10} xl={10}lg={12} md={12} sm={24} xs={24} style={{textAlign: width >768 && 'right'}}>
-              <Input.Search 
-                placeholder="输入内容以搜索"
-                style={{ height: '100%', width: isSmallScreen ? '100%' : 270 }}/>
-            </Col>
-          </Row>
+          <MainHanle onAdd={this.showModal} onDelete={this.deleteHandle}/>
           <Table 
             dataSource={roleList} 
             rowKey="fRoleid" 
@@ -129,30 +111,9 @@ class Role extends Component {
           />  
         </div>
         <MyModal visible={visible} data={rowData} trigger={this.modalEvent}/>
-        {isMobile && <style>{`
-          .ant-modal {
-            margin: 0;
-            padding: 0;
-            top: 0;
-            width: 100%!important;
-          }
-          .ant-modal *:not(button) {
-            border-radius: 0!important;
-            box-shadow: none!important;
-          }
-          .ant-modal-mask {
-            background-color: #fff;
-          }
-          .base li {
-            width: 100%!important;
-          }
-        `}</style>}
       </div>
     )
   }
 }
 
-
-const mapStateToProps = state => state
-
-export default connect(mapStateToProps)(Role)
+export default Role

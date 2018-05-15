@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Modal, Form ,Input, Tree, message, Select } from 'antd'
+import { Form ,Input, Tree, message, Select } from 'antd'
+import Modal from '@/components/modal'
 import { getStore } from '@/utils'
 import { common } from '@/api'
 
@@ -81,14 +82,14 @@ class App extends Component {
     };
     return (
       <Modal 
-        className="modal"
         destroyOnClose={true}
         title={mode}
         visible={visible}
         onOk={this.handleSubmit}
-        onCancel={this.handleCancel}>
-        <Form>
-          <ul className="base">
+        onCancel={this.handleCancel}
+        width="750px">
+        <Form className="form">
+          <ul>
             <li style={{width:'50%'}}>
               <Form.Item label="角色名称" {...formItemLayout}>
               {getFieldDecorator('fName', {
@@ -115,6 +116,7 @@ class App extends Component {
           </ul>
         </Form>
         <Tree
+          className="tree"
           checkable
           checkStrictly
           defaultExpandAll

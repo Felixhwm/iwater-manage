@@ -1,5 +1,10 @@
 .sider {
 	background-color: #37485f;
+	overflow-y: scroll;
+	&::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+	}
 	.sider-logo {
 		display: block;
 		padding: 10px 0; 

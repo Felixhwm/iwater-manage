@@ -1,5 +1,5 @@
 import React from 'react'
-import { common } from '@api'
+import { common } from '@/api'
 import { Tree, Layout } from 'antd';
 const TreeNode = Tree.TreeNode;
 const Sider = Layout.Sider;
