@@ -9,7 +9,6 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
 
  class Alert extends Component {
   state = {
-     value: null,
      roleList: []
   }
   initData = async() => {
@@ -27,25 +26,30 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
     this.props.trigger(false)
   }
   submitHandle = () => {
+    const { data } = this.props;
     this.props.form.validateFields(async(err, values) => {
       if(err) return;
       const res = await common({
-        tradeCode: 'user.insertSelective',
+        tradeCode: data.fPid ? 'user.updateByPrimaryKeySelective' : 'user.insertSelective',
         ...values,
         fState: values.fState ? 0 : 1,
         fPassword: md5(values.fPassword),
-        areas: values.areas.toString()
+        areas: values.areas && values.areas.map(k => k.value).toString(),
+        fPid: values.fPid || data.fPid
       })
       if(res.rspCode === '00') {
-        message.success('添加成功！');
+        message.success('操作成功！');
         this.props.trigger(true);
+      }else if(res.rspCode === '99') {
+        message.error('登录名已存在！');
+      }else {
+        message.error('系统繁忙，请稍后再试！');
       }
     })
   }
   render() {
     const { roleList } = this.state
     const { data } = this.props;
-    console.log(data)
     const { isMobile } = this.props.size
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
@@ -54,7 +58,7 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
     }
     return (
       <Modal
-        title={ data.title}
+        title={Object.keys(data).length === 0 ? '添加' :'编辑'}
         visible={this.props.visible}
         onOk={this.submitHandle}
         onCancel={this.onCancel}
@@ -67,7 +71,7 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
                   initialValue: data.fName,
                   rules: [{ required: true, whitespace: true, message: '请输入姓名！' }],
                 })(
-                  <Input maxLength="10"/>
+                  <Input maxLength="10" size="small"/>
                 )}
               </Form.Item>
               <Form.Item label="登陆账号:" {...formItemLayout} colon={false}>
@@ -90,11 +94,11 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
                 {getFieldDecorator('fBrno', {
                   initialValue: data.fBrno,
                   rules: [{ required: true, whitespace: true, message: '请选择所在机构！' }],
-                })(<Organization treeDefaultExpandAll/>)}
+                })(<Organization type="select" treeDefaultExpandAll/>)}
               </Form.Item>
               <Form.Item label="权限角色:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fRoleid', {
-                  initialValue: data.fBrno,
+                  initialValue: data.fRoleid && Number(data.fRoleid),
                   rules: [
                     { required: true, whitespace: true, message: '请选择权限角色！', type: 'number' }
                   ],
@@ -106,10 +110,10 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
               </Form.Item>
               <Form.Item label="责任区域:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('areas', {
-                  initialValue: data.areas && [data.areas],
+                  initialValue: data.area_id && data.area_id.split(',').map((k, i) => ({value: k, label: data.area_name.split(',')[i]})),
                   rules: [{ type: 'array' }],
                 })(
-                  <StationSelect type="select" multiple={true}/>
+                    <StationSelect type="select" allowClear multiple/>
                 )}
               </Form.Item>
             </Col>
@@ -151,7 +155,7 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
               <Form.Item label="是否有效:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fState', {
                   valuePropName: 'checked',
-                  initialValue: data.fState ? (data.fState === 0 ? true : false) : true,
+                  initialValue: data.fState ? (data.fState === '0' ? true : false) : true,
                   rules: [{ required: true, message: '请选择有效性！' }],
                 })(<Switch/>)}
               </Form.Item>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TreeSelect } from 'antd'
+import { TreeSelect, Tree } from 'antd'
 import { common } from '@/api'
 
 export default class componentName extends Component {
@@ -19,11 +19,13 @@ export default class componentName extends Component {
     this.initData()
   }
   render() {
+    const{ type } = this.props
     return (
-      <TreeSelect 
-        {...this.props}
-        treeData={this.state.treeData}
-      />
+      type === 'select' ? (
+        <TreeSelect {...this.props} treeData={this.state.treeData}/>
+      ) : (
+        <Tree {...this.props} treeData={this.state.treeData} />
+      )
     )
   }
 }

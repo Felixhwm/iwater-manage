@@ -56,8 +56,11 @@ body {
 		vertical-align: text-bottom;
 	}
 }	
-.ant-input {
+.ant-input:not(textarea) {
 	height: 34px!important;
+}
+textarea.ant-input {
+	min-height: 34px;
 }
 
 .ant-form-item-label {

@@ -22,6 +22,7 @@ class MainHandle extends Component {
         <Col xxl={10} xl={10}lg={12} md={12} sm={24} xs={24} style={{textAlign: width >768 && 'right'}}>
           <Input.Search 
             placeholder="输入内容以搜索"
+            onSearch={this.props.onSearch}
             style={{ height: '100%', width: isSmallScreen ? '100%' : 270 }}/>
         </Col>
       </Row>

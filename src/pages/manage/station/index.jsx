@@ -1,20 +1,17 @@
 import React, { Component } from 'react'
-import './index.scss'
 import Breadcrumb from '@/components/breadcrumb'
 import MainHanle from '@/components/mainHandle'
 import Pagination from '@/components/pagination'
 import Delete from '@/components/delete'
-import Alert from './modal'
-import { getRoleList, deleteRole } from '@/api'
+import Alert from './alert'
+import { getStationList, deleteStation } from '@/api'
 import { Table } from 'antd'
 
-class Role extends Component {
+class Branch extends Component {
   state = {
     visible: false,
-    submit: false,
-    confirmLoading: false,
     rowData: {},
-    roleList: [],
+    stationList: [],
     total: null,
     searchData: {
       pageNum: 1,
@@ -23,13 +20,11 @@ class Role extends Component {
     selectedRowKeys: []
   }
   initData = async() => {
-    const { pageNum, limit } = this.state.searchData;
-    const res = await getRoleList({
-      pageNum,
-      limit
+    const res = await getStationList({
+      ...this.state.searchData
     });
-    this.setState({
-      roleList: res.data.list,
+    res.data && this.setState({
+      stationList: res.data.list,
       total: res.data.total
     })
   }
@@ -46,44 +41,48 @@ class Role extends Component {
       })
     },
   }
-  showModal = (rowData = {}) => {
+  showAlert = (rowData = {}) => {
     this.setState({
       rowData,
       visible: true
     })
   }
-  modalEvent = (event) => {
+  AlertTrigger = (ok) => {
     this.setState({
       visible: false
     })
-    event === 'submit' && this.initData();
+    if(ok) this.initData();
   }
   deleteHandle = () => {
     const keys = this.state.selectedRowKeys
-    Delete(keys, deleteRole, this.initData)
+    Delete(keys, deleteStation, this.initData)
   }
   componentDidMount() {
     this.initData();
   }
   render() {
-    const { visible, roleList, rowData, total, searchData } = this.state;
+    const { visible, stationList, rowData, total, searchData } = this.state;
     return (
       <div className="main">
         <Breadcrumb first="管理平台" second="角色管理"></Breadcrumb>
         <div className="main-container">
-          <MainHanle onAdd={this.showModal} onDelete={this.deleteHandle}/>
+          <MainHanle onAdd={this.showAlert} onDelete={this.deleteHandle}/>
           <Table 
-            dataSource={roleList} 
-            rowKey="fRoleid" 
+            dataSource={stationList} 
+            rowKey="fPid" 
             size="small" 
             pagination={false} 
-            scroll={{ x: 555 }}
+            scroll={{ x: 800 }}
             rowSelection={this.rowSelection}>
-            <Table.Column title="角色名称" dataIndex="fName"></Table.Column>
-            <Table.Column title="角色代码" dataIndex="fRoleid"></Table.Column>
-            <Table.Column title="角色类型" dataIndex="fTypename"></Table.Column>
+            <Table.Column title="站点名称" dataIndex="fName"></Table.Column>
+            <Table.Column title="所属机构" dataIndex="branchname"></Table.Column>
+            <Table.Column title="上级机构名称" dataIndex="areaname"></Table.Column>
+            <Table.Column title="负责人" dataIndex="contname"></Table.Column>
+            <Table.Column title="负责人电话" dataIndex="fConttel"></Table.Column>
+            <Table.Column title="服务户数" dataIndex="fSerFamily"></Table.Column>
+            <Table.Column title="服务人数" dataIndex="fSerPeople"></Table.Column>
             <Table.Column title="操作" width="90px" fixed="right" render={(text, record) => (
-              <span className="span" onClick={() => this.showModal(record)}>
+              <span className="span" onClick={() => this.showAlert(record)}>
                 查看详情
               </span>
             )}></Table.Column>
@@ -93,10 +92,10 @@ class Role extends Component {
             searchData={searchData} 
             onChange={this.pageChangeHandle}/>  
         </div>
-        <Alert visible={visible} data={rowData} trigger={this.modalEvent}/>
+        <Alert visible={visible} data={rowData} trigger={this.AlertTrigger}/>
       </div>
     )
   }
 }
 
-export default Role
+export default Branch

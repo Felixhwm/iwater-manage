@@ -11,10 +11,13 @@ import Error from '@/pages/monitoring/error/'
 import Run from '@/pages/monitoring/run/'
 import Statistics from '@/pages/monitoring/statistics/'
 import Cost from '@/pages/expense/cost'
-import Repository from '@/pages/service/repository/';
-import Faq from '@/pages/service/faq/';
-import Role from '@/pages/manage/role/';
+import Repository from '@/pages/service/repository/'
+import Faq from '@/pages/service/faq/'
+import Role from '@/pages/manage/role/'
 import Person from '@/pages/manage/person/'
+import Area from '@/pages/manage/area'
+import Branch from '@/pages/manage/branch'
+import Station from '@/pages/manage/station'
 
 export default class Routes extends React.Component {
 	render() {
@@ -32,6 +35,9 @@ export default class Routes extends React.Component {
 				<Route path="/app/service/respository" component={Repository}/>
 				<Route exact path="/app/manage/role" component={Role}/>
 				<Route exact path="/app/manage/person" component={Person}/>
+				<Route exact path="/app/manage/area" component={Area}/>
+				<Route exact path="/app/manage/branch" component={Branch}/>
+				<Route exact path="/app/manage/station" component={Station}/>
 		    <Redirect from="/app" to="/app/index"/>
 		  </Switch>
 		)

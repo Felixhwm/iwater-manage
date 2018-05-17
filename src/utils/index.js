@@ -37,6 +37,20 @@ export const removeStore = name => {
 	window.sessionStorage.removeItem(name);
 }
 
+export const getTime = (date = new Date()) => {
+  var year = date.getFullYear();
+  var month = date.getMonth()+1;
+  var day = date.getDate();
+  // var Hours = date.getHours();
+  // var Minutes = date.getMinutes();
+  // var Seconds = date.getSeconds();
+  var time = 
+    year + '-' + 
+    (month < 10 ? '0' + month : month) + '-' + 
+    (day < 10 ? '0' + day : day);
+  return time;
+}
+
 export const sectToTime = (s) => {
   if(s > -1){
       var hour = Math.floor(s/3600);

@@ -31,3 +31,14 @@
     color: #00c1de;
   }
 }
+.ant-select-dropdown {
+  border: 1px solid #ccc;
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: hsla(220,4%,58%,.3);
+  }
+}

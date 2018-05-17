@@ -1,20 +1,17 @@
 import React, { Component } from 'react'
-import './index.scss'
 import Breadcrumb from '@/components/breadcrumb'
 import MainHanle from '@/components/mainHandle'
 import Pagination from '@/components/pagination'
 import Delete from '@/components/delete'
-import Alert from './modal'
-import { getRoleList, deleteRole } from '@/api'
+import Alert from './alert'
+import { getBranchList, deleteBranch } from '@/api'
 import { Table } from 'antd'
 
-class Role extends Component {
+class Branch extends Component {
   state = {
     visible: false,
-    submit: false,
-    confirmLoading: false,
     rowData: {},
-    roleList: [],
+    branchList: [],
     total: null,
     searchData: {
       pageNum: 1,
@@ -23,13 +20,11 @@ class Role extends Component {
     selectedRowKeys: []
   }
   initData = async() => {
-    const { pageNum, limit } = this.state.searchData;
-    const res = await getRoleList({
-      pageNum,
-      limit
+    const res = await getBranchList({
+      ...this.state.searchData
     });
     this.setState({
-      roleList: res.data.list,
+      branchList: res.data.list,
       total: res.data.total
     })
   }
@@ -46,44 +41,45 @@ class Role extends Component {
       })
     },
   }
-  showModal = (rowData = {}) => {
+  showAlert = (rowData = {}) => {
     this.setState({
       rowData,
       visible: true
     })
   }
-  modalEvent = (event) => {
+  AlertTrigger = (ok) => {
     this.setState({
       visible: false
     })
-    event === 'submit' && this.initData();
+    if(ok) this.initData();
   }
   deleteHandle = () => {
     const keys = this.state.selectedRowKeys
-    Delete(keys, deleteRole, this.initData)
+    Delete(keys, deleteBranch, this.initData)
   }
   componentDidMount() {
     this.initData();
   }
   render() {
-    const { visible, roleList, rowData, total, searchData } = this.state;
+    const { visible, branchList, rowData, total, searchData } = this.state;
     return (
       <div className="main">
         <Breadcrumb first="管理平台" second="角色管理"></Breadcrumb>
         <div className="main-container">
-          <MainHanle onAdd={this.showModal} onDelete={this.deleteHandle}/>
+          <MainHanle onAdd={this.showAlert} onDelete={this.deleteHandle}/>
           <Table 
-            dataSource={roleList} 
-            rowKey="fRoleid" 
+            dataSource={branchList} 
+            rowKey="id" 
             size="small" 
             pagination={false} 
-            scroll={{ x: 555 }}
+            scroll={{ x: 800 }}
             rowSelection={this.rowSelection}>
-            <Table.Column title="角色名称" dataIndex="fName"></Table.Column>
-            <Table.Column title="角色代码" dataIndex="fRoleid"></Table.Column>
-            <Table.Column title="角色类型" dataIndex="fTypename"></Table.Column>
+            <Table.Column title="名称" dataIndex="label"></Table.Column>
+            <Table.Column title="级别" dataIndex="fLevel"></Table.Column>
+            <Table.Column title="上级机构名称" dataIndex="branchname"></Table.Column>
+            <Table.Column title="机构性质" dataIndex="showpropty"></Table.Column>
             <Table.Column title="操作" width="90px" fixed="right" render={(text, record) => (
-              <span className="span" onClick={() => this.showModal(record)}>
+              <span className="span" onClick={() => this.showAlert(record)}>
                 查看详情
               </span>
             )}></Table.Column>
@@ -93,10 +89,10 @@ class Role extends Component {
             searchData={searchData} 
             onChange={this.pageChangeHandle}/>  
         </div>
-        <Alert visible={visible} data={rowData} trigger={this.modalEvent}/>
+        <Alert visible={visible} data={rowData} trigger={this.AlertTrigger}/>
       </div>
     )
   }
 }
 
-export default Role
+export default Branch

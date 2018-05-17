@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
-import Breadcrumb from '@/components/breadcrumb/'
-import MainHanle from '@/components/mainHandle/'
+import Breadcrumb from '@/components/breadcrumb'
+import MainHanle from '@/components/mainHandle'
+import Pagination from '@/components/pagination'
+import Delete from '@/components/delete'
 import Alert from './alert'
 import './index.scss'
-import { Table, Pagination, message, Modal } from 'antd'
-import { getUserList, common } from '@/api'
+import { Table } from 'antd'
+import { getUserList, deleteUser, searchUser } from '@/api'
 
 export default class App extends Component {
   state = {
     personList: [],
-    total: null,
+    total: 0,
     searchData: {
       limit: 17,
       pageNum: 1
@@ -30,12 +32,21 @@ export default class App extends Component {
       total: res.data.total
     })
   }
-  pageChangeHandle = (pageNum) => {
-    this.setState({
-      searchData: {...this.state.searchData, pageNum}
-      }, () => {
-      this.initData();
+  searchHandle = async(condition) => {
+    console.log(condition)
+    const res = await searchUser({
+      condition
     })
+    this.setState({
+      personList: res.data.list,
+      total: res.data.total
+    })
+  }
+  pageChangeHandle = async (pageNum) => {
+    await this.setState({
+      searchData: {...this.state.searchData, pageNum}
+    })
+    this.initData()
   }
   rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
@@ -45,29 +56,12 @@ export default class App extends Component {
     },
   }
   deleteHandle = () => {
-    const { selectedRowKeys } = this.state;
-    if(selectedRowKeys.length === 0) {
-      message.warning('请先选中需要删除的行！');
-      return 
-    }
-    Modal.confirm({
-      title: '提示?',
-      content: '您确定要删除选中的所有数据吗？',
-      onOk: async() => {
-        const fPid = selectedRowKeys.reduce((total, num) => total+','+num)
-        await common({
-          tradeCode: 'user.deleteByPrimaryKey',
-          fPid
-        }); 
-        message.success('删除成功！');
-        this.initData();
-      }
-    });
+    const keys = this.state.selectedRowKeys
+    Delete(keys, deleteUser, this.initData)
   }
-  showAlert = (rowData) => {
-    console.log(rowData ? 0 : 1)
+  showAlert = (rowData = {}) => {
     this.setState({
-      rowData: rowData ? { title: '添加' } : {...rowData, title: '编辑'},
+      rowData,
       visible: true
     })
   }
@@ -78,13 +72,12 @@ export default class App extends Component {
     if(ok) this.initData();
   }
   render() {
-    const { personList, total, visible, rowData } = this.state;
-    const { pageNum, limit } = this.state.searchData;
+    const { personList, total, visible, rowData, searchData } = this.state;
     return (
       <div className="main">
         <Breadcrumb first="管理平台" second="人员管理"/>
         <div className="main-container">
-          <MainHanle onAdd={this.showAlert} onDelete={this.deleteHandle}/>
+          <MainHanle onAdd={this.showAlert} onDelete={this.deleteHandle} onSearch={this.searchHandle}/>
           <Table
             dataSource={personList} 
             // expandedRowRender={record => 
@@ -126,9 +119,7 @@ export default class App extends Component {
             )}/>
           </Table>
           <Pagination
-            size="small" showQuickJumper 
-            total={total} current={pageNum} pageSize={limit}
-            showTotal={(total, range) => `共 ${this.state.total} 条`}
+            total={total} searchData={searchData}
             onChange={this.pageChangeHandle}/>
         </div>
         <Alert visible={visible} data={rowData} trigger={this.AlertTrigger}/>

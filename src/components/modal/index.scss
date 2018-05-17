@@ -6,6 +6,8 @@
   }
   .ant-modal-content {
     border-radius: 16px 16px 8px 8px!important;
+    .ant-form-item {
+    }
   }
   .ant-modal-header {
     border-radius: 8px 8px 0 0;
@@ -18,6 +20,9 @@
       font-weight: bold!important;
       text-align: center!important;
     }
+  }
+  .ant-modal-body {
+    padding-bottom: 10px;
   }
   .ant-modal-footer {
     border: none!important;
