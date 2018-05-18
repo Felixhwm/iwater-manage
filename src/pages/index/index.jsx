@@ -2,8 +2,8 @@ import React from 'react'
 import './index.scss'
 import { Row, Col } from 'antd'
 import { Map, Marker, InfoWindow } from 'react-amap'
-import { getStationList, getStationStatu } from '@api'
-import { getCookie } from '@utils'
+import { getStationList, getStationStatu } from '@/api'
+import { getCookie } from '@/utils'
 
 class Index extends React.Component {
 	constructor() {
@@ -70,11 +70,11 @@ class Index extends React.Component {
 	getIcon = (item) => {
 		let deviceState = item.statu.deviceState;
 		if(deviceState === '暂无信息') {
-			return require('@imgs/station_normal.png')	
+			return require('@/style/imgs/station_normal.png')	
 		}else if(deviceState === '全部正常') {
-			return require('@imgs/station_ok.png')
+			return require('@/style/imgs/station_ok.png')
 		}else {
-			return require('@imgs/station_nook.png')
+			return require('@/style/imgs/station_nook.png')
 		}
 		
 	}

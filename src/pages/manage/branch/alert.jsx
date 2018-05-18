@@ -16,7 +16,7 @@ class Alert extends Component {
       const res = await common({
         tradeCode: data.id ? 'branch.updateByPrimaryKeySelective' : 'branch.insertSelective',
         ...values,
-        id: data.id || ''
+        id: values.id || data.id
       })
       if(res.rspCode === '00') {
         message.success('操作成功！');
@@ -30,7 +30,6 @@ class Alert extends Component {
   }
   render() {
     const { data } = this.props
-    console.log(data)
     const { isMobile } = this.props.size
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
@@ -47,6 +46,12 @@ class Alert extends Component {
         <Form className="form">
           <Row gutter={20}>
             <Col span={isMobile ? 24 : 12}>
+              <Form.Item label="机构编号:" {...formItemLayout} colon={false}>
+                {getFieldDecorator('id', {
+                  initialValue: data.id,
+                  rules: [{ required: true, whitespace: true, message: '请输入机构编号！' }]
+                })(<Input maxLength="16"/>)}
+              </Form.Item>
               <Form.Item label="机构名称:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('label', {
                   initialValue: data.label,

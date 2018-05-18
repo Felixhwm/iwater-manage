@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Icon } from 'antd'
+import { Menu } from 'antd'
 
 export default ({ data, rootPath, ...props }) => 
   <Menu {...props}>
@@ -16,7 +16,9 @@ export default ({ data, rootPath, ...props }) =>
         item.child && item.child.map(each => 
           <Menu.Item
             key={`${rootPath}/${item.menuUrl}/${each.menuUrl}`}>
-            <span><Icon type="mail" />{ each.menuName }</span>
+            <span>
+              {item.menuUrl === 'manage' &&<i className="i" style={{backgroundImage: `url(${require('@/style/imgs/'+each.menuUrl+'.png')})`}}/>}
+              { each.menuName }</span>
         </Menu.Item>)
       }
     </Menu.SubMenu>)

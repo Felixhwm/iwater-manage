@@ -4,7 +4,7 @@ import MainHanle from '@/components/mainHandle'
 import Pagination from '@/components/pagination'
 import Delete from '@/components/delete'
 import Alert from './alert'
-import { getStationList, deleteStation } from '@/api'
+import { getStationList, deleteStation, searchStation } from '@/api'
 import { Table } from 'antd'
 
 class Branch extends Component {
@@ -25,6 +25,15 @@ class Branch extends Component {
     });
     res.data && this.setState({
       stationList: res.data.list,
+      total: res.data.total
+    })
+  }
+  searchHandle = async(condition) => {
+    const res = await searchStation({
+      condition
+    })
+    this.setState({
+      personList: res.data.list,
       total: res.data.total
     })
   }
@@ -66,7 +75,7 @@ class Branch extends Component {
       <div className="main">
         <Breadcrumb first="管理平台" second="角色管理"></Breadcrumb>
         <div className="main-container">
-          <MainHanle onAdd={this.showAlert} onDelete={this.deleteHandle}/>
+          <MainHanle onAdd={this.showAlert} onDelete={this.deleteHandle} onSearch={this.searchHandle}/>
           <Table 
             dataSource={stationList} 
             rowKey="fPid" 

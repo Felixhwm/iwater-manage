@@ -1,8 +1,8 @@
 import React from 'react';
 import md5 from 'js-md5';
-import { login } from '@api'
-import { setStore } from '@utils'
-import '@style/pages/login.scss'
+import { login } from '@/api'
+import { setStore } from '@/utils'
+import '@/style/pages/login.scss'
 import { Form, Icon, Input, Button, message } from 'antd';
 const FormItem = Form.Item;
 
@@ -52,8 +52,8 @@ class LoginForm extends React.Component {
 			<div className="bg">
 				{/* <img src={require('@imgs/logo_name.jpg')} className="logo-name" alt="logo" style={{width: isMobile&&'100%'}}/> */}
 					<Form onSubmit={this.handleSubmit} className="login-form">
-						<img src={require('@imgs/logo.png')} className="logo1" alt="logo"></img>
-						<img src={require('@imgs/logo_text.jpg')} className="logo2" alt="logo"></img>
+						<img src={require('@/style/imgs/logo.png')} className="logo1" alt="logo"></img>
+						<img src={require('@/style/imgs/logo_text.jpg')} className="logo2" alt="logo"></img>
 						<FormItem>
 							{getFieldDecorator('name', {
 								initialValue: 'admin',

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './index.scss'
 import { Layout, Row, Col } from 'antd'
-import { getAreaList } from '@api';
+import { getAreaList } from '@/api';
 import Pie from './pie'
 import Table from './table'
 import Line from './line'

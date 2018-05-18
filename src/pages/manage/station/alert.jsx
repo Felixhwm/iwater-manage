@@ -3,14 +3,27 @@ import { connect } from 'react-redux'
 import Modal from '@/components/modal'
 import Organization from '@/components/organizationSelect'
 import StationSelect from '@/components/stationSelect'
-import { common } from '@/api'
-import { getTime } from '@/utils'
+import DeviceType from '@/components/deviceType'
+import { common, getCraftList } from '@/api'
+import moment from 'moment'
 import { baseUrl } from '@/api/request.js'
-import { Form, Input, DatePicker, Upload, message, Row, Col, Icon } from 'antd'
+import { Form, Input, Select, DatePicker, Upload, message, Row, Col, Icon } from 'antd'
 
 class Alert extends Component {
   state = {
-    loading: false
+    loading: false,
+    imageUrl: '',
+    craftList: [],
+    deviceList: []
+  }
+  componentDidMount() {
+    this.initData()
+  }
+  initData = async() => {
+    const res =  await getCraftList()
+    this.setState({
+      craftList: res.listInfo
+    })
   }
   beforeUpload = (file) => {
     const isJPG = file.type === 'image/jpeg';
@@ -50,21 +63,25 @@ class Alert extends Component {
     this.props.form.validateFields(async(err, values) => {
       if(err) return;
       const res = await common({
-        tradeCode: data.id ? 'branch.updateByPrimaryKeySelective' : 'branch.insertSelective',
+        tradeCode: data.id ? 'station.updateByPrimaryKeySelective' : 'station.insertSelective',
         ...values,
-        id: data.id || ''
+        fBuilddate: values.fBuilddate.format('YYYY-MM-DD'),
+        fAreaid: values.fAreaid.value,
+        fPhotoOne: values.fPhotoOne.file.response.fPic1,
+        fPid: values.fPid
       })
       if(res.rspCode === '00') {
         message.success('操作成功！');
         this.props.trigger(true);
       }else if(res.rspCode === '99') {
-        message.error('机构名已存在！');
+        message.error('站点名已存在！');
       }else {
         message.error('系统繁忙，请稍后再试！');
       }
     })
   }
   render() {
+    const { craftList, loading, imageUrl } = this.state
     const { data } = this.props
     console.log(data)
     const { isMobile } = this.props.size
@@ -75,8 +92,8 @@ class Alert extends Component {
     }
     const uploadButton = (
       <div>
-        <Icon type={this.state.loading ? 'loading' : 'plus'} />
-        <div className="ant-upload-text">Upload</div>
+        <Icon type={loading ? 'loading' : 'plus'} />
+        <div className="ant-upload-text">上传</div>
       </div>
     )
     return (
@@ -85,8 +102,7 @@ class Alert extends Component {
         visible={this.props.visible}
         onOk={this.submitHandle}
         onCancel={this.onCancel}
-        width="800px"
-        bodyStyle={{ height: !isMobile && 600, overflowY: !isMobile && 'auto'}}>
+        width="800px">
         <Form className="form">
           <Row gutter={20}>
             <Col span={isMobile ? 24 : 12}>
@@ -111,7 +127,7 @@ class Alert extends Component {
               <Form.Item label="所属区域:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fAreaid', {
                   initialValue: data.fAreaid && { label: data.areaname, value: data.fAreaid },
-                  rules: [{ required: true, whitespace: true, message: '请选择所属机构！' }],
+                  rules: [{ required: true, whitespace: true, message: '请选择所属区域！', type: 'object' }],
                 })(<StationSelect type="select"/>)}
               </Form.Item>
               <Form.Item label="建设单位:" {...formItemLayout} colon={false}>
@@ -158,9 +174,9 @@ class Alert extends Component {
               </Form.Item>
               <Form.Item label="建设日期:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fBuilddate', {
-                  initialValue: data.fBuilddate,
-                  rules: [{ required: true, whitespace: true, message: '请输入建设日期！' }]
-                })(<DatePicker style={{width: '100%'}}/>)}
+                  initialValue: (data.fBuilddate && data.fBuilddate.indexOf('-') > -1 && moment(data.fBuilddate, 'YYYY-MM-DD')) || undefined,
+                  rules: [{  type: 'object', required: true, message: '请输入建设日期！' }]
+                })(<DatePicker style={{width: '100%'}} placeholder=""/>)}
               </Form.Item>
               <Form.Item label="负责人:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('contname', {
@@ -204,7 +220,11 @@ class Alert extends Component {
                 {getFieldDecorator('fTtype', {
                   initialValue: data.fTtype,
                   rules: [{ required: true, whitespace: true, message: '请选择工艺类型！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Select>
+                    {craftList.map( item => 
+                        <Select.Option key={item.fId} value={item.fId}>{item.fName}</Select.Option>
+                    )}
+                </Select>)}
               </Form.Item>
               <Form.Item label="处理水量:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fWcount', {
@@ -236,12 +256,6 @@ class Alert extends Component {
                   rules: [{ required: true, whitespace: true, message: '请输入湿地个数！' }]
                 })(<Input maxLength="16"/>)}
               </Form.Item>
-              <Form.Item label="提升井数:" {...formItemLayout} colon={false}>
-                {getFieldDecorator('fPwcount', {
-                  initialValue: data.fPwcount,
-                  rules: [{ required: true, whitespace: true, message: '请输入提升井数！' }]
-                })(<Input maxLength="16"/>)}
-              </Form.Item>
               <Form.Item label="出水标准:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fEffluent', {
                   initialValue: data.fEffluent,
@@ -255,8 +269,8 @@ class Alert extends Component {
                 })(<Input maxLength="16"/>)}
               </Form.Item>
               <Form.Item label="站点二维码:" {...formItemLayout} colon={false}>
-                {getFieldDecorator('fCesspool', {
-                  initialValue: data.fCesspool,
+                {getFieldDecorator('fQrcode', {
+                  initialValue: data.fQrcode,
                   rules: [{ required: true, whitespace: true, message: '请选择站点二维码！' }]
                 })(<Input maxLength="16"/>)}
               </Form.Item>
@@ -264,12 +278,12 @@ class Alert extends Component {
                 {getFieldDecorator('fComDeviceid', {
                   initialValue: data.fComDeviceid,
                   rules: [{ required: true, whitespace: true, message: '请选择关联通讯设备！' }]
-                })(<Input maxLength="16"/>)}
+                })(<DeviceType/>)}
               </Form.Item>
               <Form.Item label="站点图片:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fPhotoOne', {
                   initialValue: data.fPhotoOne,
-                  rules: [{ required: true, whitespace: true, message: '请选择站点图片！' }]
+                  rules: [{ required: true, whitespace: true, message: '请选择站点图片！', type: 'object'}]
                 })(
                   <Upload
                     listType="picture-card"
@@ -279,13 +293,20 @@ class Alert extends Component {
                     beforeUpload={this.beforeUpload}
                     onChange={this.handleChange}
                   >
-                    {this.state.imageUrl ? <img src={this.state.imageUrl} alt="" /> : uploadButton}
+                    {imageUrl ? <img src={imageUrl} alt="" width="100%"/> : uploadButton}
                   </Upload>
                 )}
+                <style>{`
+                  .avatar-uploader > .ant-upload {
+                    width: 128px;
+                    height: 128px;
+                  }
+                `}</style>
               </Form.Item>
               <Form.Item label="备注:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fRemark', {
                   initialValue: data.fRemark,
+                  valuePropName: 'file',
                   rules: [{ required: true, whitespace: true, message: '请输入备注！' }]
                 })(<Input.TextArea autosize maxLength="60"/>)}
               </Form.Item>

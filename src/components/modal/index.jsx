@@ -11,6 +11,8 @@ class CustomModal extends Component {
         className="custom-modal"
         width={this.props.width}
         maskClosable={false}
+        destroyOnClose
+        bodyStyle={{ maxHeight: !isMobile && 600, overflowY: !isMobile && 'auto'}}
         {...this.props}>
         {this.props.children}
         {

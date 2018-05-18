@@ -33,7 +33,6 @@ export default class App extends Component {
     })
   }
   searchHandle = async(condition) => {
-    console.log(condition)
     const res = await searchUser({
       condition
     })

@@ -4,7 +4,7 @@ import MainHanle from '@/components/mainHandle'
 import Pagination from '@/components/pagination'
 import Delete from '@/components/delete'
 import Alert from './alert'
-import { getBranchList, deleteBranch } from '@/api'
+import { getBranchList, deleteBranch, searchBranch } from '@/api'
 import { Table } from 'antd'
 
 class Branch extends Component {
@@ -23,6 +23,15 @@ class Branch extends Component {
     const res = await getBranchList({
       ...this.state.searchData
     });
+    this.setState({
+      branchList: res.data.list,
+      total: res.data.total
+    })
+  }
+  searchHandle = async(condition) => {
+    const res = await searchBranch({
+      condition
+    })
     this.setState({
       branchList: res.data.list,
       total: res.data.total
@@ -66,7 +75,7 @@ class Branch extends Component {
       <div className="main">
         <Breadcrumb first="管理平台" second="角色管理"></Breadcrumb>
         <div className="main-container">
-          <MainHanle onAdd={this.showAlert} onDelete={this.deleteHandle}/>
+          <MainHanle onAdd={this.showAlert} onDelete={this.deleteHandle} onSearch={this.searchHandle}/>
           <Table 
             dataSource={branchList} 
             rowKey="id" 
@@ -74,7 +83,8 @@ class Branch extends Component {
             pagination={false} 
             scroll={{ x: 800 }}
             rowSelection={this.rowSelection}>
-            <Table.Column title="名称" dataIndex="label"></Table.Column>
+            <Table.Column title="机构名称" dataIndex="label"></Table.Column>
+            <Table.Column title="编号" dataIndex="id"></Table.Column>
             <Table.Column title="级别" dataIndex="fLevel"></Table.Column>
             <Table.Column title="上级机构名称" dataIndex="branchname"></Table.Column>
             <Table.Column title="机构性质" dataIndex="showpropty"></Table.Column>

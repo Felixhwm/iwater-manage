@@ -1,7 +1,7 @@
 import React from 'react'
 import { getWorkOrderList } from '@/api'
 import { getStore } from '@/utils'
-import '@style/pages/error.scss'
+import '@/style/pages/error.scss'
 import { Table, Pagination, Input, Button, Radio } from 'antd';
 const { Column } = Table;
 const Search = Input.Search;

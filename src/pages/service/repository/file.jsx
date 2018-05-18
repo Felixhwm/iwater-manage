@@ -143,17 +143,17 @@ export default class File extends Component {
                         <div className="video-bg" style={{backgroundImage: `url(${item.readPath + item.picName})`}}>
                         </div>
                         <div className="video-hot">
-                          <span style={{backgroundImage: `url(${require('@imgs/eye1.png')})`}}  className="icon-eye">
+                          <span style={{backgroundImage: `url(${require('@/style/imgs/eye1.png')})`}}  className="icon-eye">
                             {item.browseTime}
                           </span>
-                          <span style={{backgroundImage: `url(${require('@imgs/down.png')})`}} className="icon-down">
+                          <span style={{backgroundImage: `url(${require('@/style/imgs/down.png')})`}} className="icon-down">
                             {item.downLoadTime}
                           </span>
                         </div>
-                        <img src={require('@imgs/play.png')} alt="播放" className="icon-play" onClick={this.videoPlay.bind(this, item)}/>
+                        <img src={require('@/style/imgs/play.png')} alt="播放" className="icon-play" onClick={this.videoPlay.bind(this, item)}/>
                         <p className="video-info">
                           <span>{item.name}</span>
-                          <img src={require('@imgs/del.png')} alt="删除" className="icon-del"/ > 
+                          <img src={require('@/style/imgs/del.png')} alt="删除" className="icon-del"/ > 
                         </p>
                       </div>
                     </Col>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import './index.scss'
 import { Menu, Layout, Icon, Popover, Divider, Dropdown } from 'antd';
-import Sider from '@components/sider/index.jsx'
+import Sider from '@/components/sider/index.jsx'
 const Header = Layout.Header;
 
 class TopHeader extends Component {

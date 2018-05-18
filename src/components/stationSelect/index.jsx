@@ -61,16 +61,13 @@ class TreeNav extends React.Component {
     const { type } = this.props
     return (
       type === 'select' ? (
-        <div id="areas">
           <TreeSelect 
             {...this.props} 
             labelInValue
             loadData={this.onLoadData} 
-            dropdownStyle={{maxHeight: 400}}
-            getPopupContainer={() => document.getElementById('areas')}>
+            dropdownStyle={{maxHeight: 400}}>
             { this.renderTreeNodes(treeData) }
           </TreeSelect>
-        </div>
         
       ) : (
         <Tree {...this.props} loadData={this.onLoadData}>

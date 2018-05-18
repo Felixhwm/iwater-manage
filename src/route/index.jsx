@@ -18,6 +18,11 @@ import Person from '@/pages/manage/person/'
 import Area from '@/pages/manage/area'
 import Branch from '@/pages/manage/branch'
 import Station from '@/pages/manage/station'
+import Device from '@/pages/manage/device'
+import FaultType from '@/pages/manage/faultType'
+import Set from '@/pages/manage/set'
+import Water from '@/pages/manage/water'
+import Threshold from '@/pages/manage/threshold'
 
 export default class Routes extends React.Component {
 	render() {
@@ -38,6 +43,11 @@ export default class Routes extends React.Component {
 				<Route exact path="/app/manage/area" component={Area}/>
 				<Route exact path="/app/manage/branch" component={Branch}/>
 				<Route exact path="/app/manage/station" component={Station}/>
+				<Route exact path="/app/manage/device" component={Device}/>
+				<Route exact path="/app/manage/faultType" component={FaultType}/>
+				<Route exact path="/app/manage/set" component={Set}/>
+				<Route exact path="/app/manage/water" component={Water}/>
+				<Route exact path="/app/manage/threshold" component={Threshold}/>
 		    <Redirect from="/app" to="/app/index"/>
 		  </Switch>
 		)

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
-import File from '@pages/service/repository/file';
-import Upload from '@pages/service/repository/upload';
-import Play from '@pages/service/repository/play';
+import File from '@/pages/service/repository/file';
+import Upload from '@/pages/service/repository/upload';
+import Play from '@/pages/service/repository/play';
 
 export default class Index extends Component {
   render() {

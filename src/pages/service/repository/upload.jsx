@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './upload.scss'
-import { getRepositoryTypeList } from '@api';
+import { getRepositoryTypeList } from '@/api';
 import { Col, Row, Form, Input, Select, Upload, Icon, Button, message } from 'antd';
 import Breadcrumb from '@/components/breadcrumb/';
 import { baseUrl } from '@/api/request.js'

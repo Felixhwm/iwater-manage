@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getAreaList, deleteArea } from '@/api'
+import { getAreaList, deleteArea, searchArea } from '@/api'
 import Breadcrumb from '@/components/breadcrumb'
 import MainHanle from '@/components/mainHandle'
 import Pagination from '@/components/pagination'
@@ -33,13 +33,13 @@ export default class componentName extends Component {
     })
   }
   searchHandle = async(condition) => {
-    // const res = await searchUser({
-    //   condition
-    // })
-    // this.setState({
-    //   personList: res.data.list,
-    //   total: res.data.total
-    // })
+    const res = await searchArea({
+      condition
+    })
+    this.setState({
+      areaList: res.data.list,
+      total: res.data.total
+    })
   }
   pageChange = async(pageNum) => {
     await this.setState({

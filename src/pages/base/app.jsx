@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Routes from '@/route'
-import '@style/pages/app.scss'
-import Sider from '@components/sider/index.jsx'
+import '@/style/pages/app.scss'
+import Sider from '@/components/sider/index.jsx'
 import Header from '@/components/header/'
 import { Layout, BackTop } from 'antd';
 const { Content } = Layout;
@@ -28,7 +28,7 @@ class App extends React.Component {
 		if (Notification.permission === "granted") {
 			new Notification("winme", {
 					body: '欢迎浏览~',
-					icon: require('../../style/imgs/winme.jpg')
+					icon: require('@/style/imgs/winme.jpg')
 			});
 		}
 	}

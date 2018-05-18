@@ -78,10 +78,10 @@ export default class componentName extends Component {
               {
                 questionList.map(item => 
                   <li className="question-list-item" key={item.faqId}>
-                    <p><i className="question-list-icon" style={{ backgroundImage: `url(${require('@imgs/q.png')})`}}/>{item.question}</p>
+                    <p><i className="question-list-icon" style={{ backgroundImage: `url(${require('@/style/imgs/q.png')})`}}/>{item.question}</p>
                     <Row type="flex" justify="space-between">
                       <Col span="16">
-                        <i className="question-list-icon" style={{ backgroundImage: `url(${require('@imgs/a.png')})`}}/>
+                        <i className="question-list-icon" style={{ backgroundImage: `url(${require('@/style/imgs/a.png')})`}}/>
                         {item.answerContent || '暂无回答'}
                       </Col>
                       <span className="to-detail" onClick={this.toDetail.bind(this, item.faqId)}>查看详情>></span>
