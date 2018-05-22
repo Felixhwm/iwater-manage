@@ -28,6 +28,8 @@ export const getQuestionDetail = params => fetch('/chat/getQuestionDetail', para
 /***************************管理平台**************************/
 //获取职位列表
 export const getRoleList = params => fetch('/table/userrole/selectByPrimaryKey', params, 'GET')
+//职位模糊搜索
+export const searchRole = params => fetch('/manage/searchRole', params, 'POST' )
 //删除职位
 export const deleteRole = params => fetch('/web', { tradeCode: 'userrole.deleteByPrimaryKey', fRoleid: params }, 'POST')      
 //获取人员列表
@@ -66,10 +68,18 @@ export const searchDevice = params => fetch('/manage/searchDevice', params, 'POS
 export const deleteDevice = params => fetch('/web', { tradeCode: 'device.deleteByPrimaryKey', fDeviceid: params }, 'POST')
 //获取故障类型列表
 export const getFaultTypeList = params => fetch('/table/faulttype/selectByPrimaryKey', params, 'GET')
+//故障类型模糊搜索
+export const searchFaultType = params => fetch('/manage/searchFaulttype', params, 'POST' )
+//获取故障大类
+export const getFaultBig = params => fetch('/web', { tradeCode: 'code.selectByPrimaryKey', fCatid: '07' }, 'POST')
+//获取故障小累
+export const getFaultSmall = params => fetch('/web', { tradeCode: 'code.selectByPrimaryKey', fCatid: '08' }, 'POST')
 //删除故障类型
 export const deleteFaultType = params => fetch('/web', { tradeCode: 'faulttype.deleteByPrimaryKey', id: params }, 'POST')
 //获取配置列表
 export const getSetList = params => fetch('/table/code/selectByPrimaryKey', params, 'GET')
+//故障类型模糊搜索
+export const searchSet = params => fetch('/manage/searchCode', params, 'POST' )
 //删除配置
 export const deleteSet = params => fetch('/web', { tradeCode: 'code.deleteByPrimaryKey', fId: params }, 'POST')
 //获取阈值列表

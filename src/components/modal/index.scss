@@ -1,13 +1,18 @@
 @import '~@/style/variables.scss';
 .custom-modal {
+  top: 0!important;
   .ant-modal-close-x {
     height: 45px;
     line-height: 45px;
   }
   .ant-modal-content {
     border-radius: 16px 16px 8px 8px!important;
-    .ant-form-item {
-    }
+      *[class*="disabled"]{
+        color: rgba(0, 0, 0, 0.65)!important;
+        * {
+          color: rgba(0, 0, 0, 0.65)!important;
+        }
+      }
   }
   .ant-modal-header {
     border-radius: 8px 8px 0 0;

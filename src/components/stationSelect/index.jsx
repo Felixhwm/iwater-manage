@@ -1,12 +1,15 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import './index.scss'
 import { common } from '@/api'
-import { Tree, TreeSelect } from 'antd'
+import { Tree, TreeSelect, Layout } from 'antd'
 
-class TreeNav extends React.Component {
+class StationSelect extends React.Component {
   state = {
     treeData: [
-      { title: '中国', key: '3', value: '3' }
+      { title: '上海市', key: '310000', value: '310000' },
+      { title: '江苏省', key: '320000', value: '320000' },
+      { title: '浙江省', key: '330000', value: '330000' }
     ],
     level: 1
   } 
@@ -58,24 +61,31 @@ class TreeNav extends React.Component {
   }
   render() {
     const { treeData } = this.state
-    const { type } = this.props
+    const { type, size } = this.props
     return (
       type === 'select' ? (
-          <TreeSelect 
-            {...this.props} 
-            labelInValue
-            loadData={this.onLoadData} 
-            dropdownStyle={{maxHeight: 400}}>
-            { this.renderTreeNodes(treeData) }
-          </TreeSelect>
-        
+          <div className="select">
+            <TreeSelect 
+              {...this.props} 
+              labelInValue
+              loadData={this.onLoadData} 
+              treeNodeFilterProp="title"
+              dropdownStyle={{maxHeight: 400}}>
+              { this.renderTreeNodes(treeData) }
+            </TreeSelect>
+            <span className="ant-select-arrow span"/>
+          </div>
       ) : (
-        <Tree {...this.props} loadData={this.onLoadData}>
-          { this.renderTreeNodes(treeData) }
-        </Tree>
+        size.isMobile ? null : <Layout.Sider width="180px">
+          <Tree loadData={this.onLoadData} {...this.props}>
+            { this.renderTreeNodes(treeData) }
+          </Tree>
+        </Layout.Sider>
       )
     )
   }
 }
 
-export default TreeNav
+const mapStateToProps = state => state
+
+export default connect(mapStateToProps)(StationSelect)

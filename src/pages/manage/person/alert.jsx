@@ -9,7 +9,10 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
 
  class Alert extends Component {
   state = {
-     roleList: []
+     roleList: [],
+     disabled: true,
+     title: '详情',
+     okText: '编辑'
   }
   initData = async() => {
     const res = await common({
@@ -21,20 +24,33 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
   }
   componentDidMount() {
     this.initData()
+    this.props.data.isAdd && this.setState({
+      disabled: false, title: '添加', okText: '确定'
+    })
   }
-  onCancel = () => {
+  onCancel = (e) => {
+    if(this.state.title === '编辑' && e.currentTarget.className === 'ant-btn') {
+      this.setState({ 
+        disabled: true, title: '详情', okText: '编辑' 
+      })
+      return this.props.form.resetFields()
+    }
     this.props.trigger(false)
   }
   submitHandle = () => {
-    const { data } = this.props;
+    const { state: { disabled }, props: { data } } = this
+    if(disabled) {
+      this.setState({ disabled: false, title: '编辑', okText: '确定' })
+      return
+    }
     this.props.form.validateFields(async(err, values) => {
       if(err) return;
       const res = await common({
-        tradeCode: data.fPid ? 'user.updateByPrimaryKeySelective' : 'user.insertSelective',
+        tradeCode: data.isAdd ? 'user.insertSelective' : 'user.updateByPrimaryKeySelective',
         ...values,
         fState: values.fState ? 0 : 1,
         fPassword: md5(values.fPassword),
-        areas: values.areas && values.areas.map(k => k.value).toString(),
+        areas: values.areas.map(k => k.value).toString(),
         fPid: values.fPid || data.fPid
       })
       if(res.rspCode === '00') {
@@ -48,21 +64,20 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
     })
   }
   render() {
-    const { roleList } = this.state
-    const { data } = this.props;
-    const { isMobile } = this.props.size
-    const { getFieldDecorator } = this.props.form
+    const { roleList, disabled, title, okText } = this.state
+    const { data, size: { isMobile }, form: { getFieldDecorator } } = this.props
     const formItemLayout = {
       labelCol: { span: 6 },
       wrapperCol: { span: 18 }
     }
     return (
       <Modal
-        title={Object.keys(data).length === 0 ? '添加' :'编辑'}
+        title={title}
+        okText={okText}
         visible={this.props.visible}
         onOk={this.submitHandle}
-        onCancel={this.onCancel}
-        width="700px">
+        onCancel={e => this.onCancel(e)}
+        width="800px">
         <Form className="form">
           <Row gutter={20}>
             <Col span={isMobile ? 24 : 12}>
@@ -71,7 +86,7 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
                   initialValue: data.fName,
                   rules: [{ required: true, whitespace: true, message: '请输入姓名！' }],
                 })(
-                  <Input maxLength="10" size="small"/>
+                  <Input maxLength="10" disabled={disabled}/>
                 )}
               </Form.Item>
               <Form.Item label="登陆账号:" {...formItemLayout} colon={false}>
@@ -79,7 +94,7 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
                   initialValue: data.fPid,
                   rules: [{ required: true, whitespace: true, message: '请输入登陆账号！' }],
                 })(
-                  <Input maxLength="16"/>
+                  <Input maxLength="16" disabled={disabled}/>
                 )}
               </Form.Item>
               <Form.Item label="密码:" {...formItemLayout} colon={false}>
@@ -87,14 +102,14 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
                   initialValue: data.fPassword,
                   rules: [{ required: true, whitespace: true, message: '请输入登陆密码！' }],
                 })(
-                  <Input type="password" maxLength="16"/>
+                  <Input type="password" maxLength="16" disabled={disabled}/>
                 )}
               </Form.Item>
               <Form.Item label="所在机构:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fBrno', {
                   initialValue: data.fBrno,
                   rules: [{ required: true, whitespace: true, message: '请选择所在机构！' }],
-                })(<Organization type="select" treeDefaultExpandAll/>)}
+                })(<Organization type="select" treeDefaultExpandAll disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="权限角色:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fRoleid', {
@@ -102,7 +117,7 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
                   rules: [
                     { required: true, whitespace: true, message: '请选择权限角色！', type: 'number' }
                   ],
-                })(<Select>
+                })(<Select disabled={disabled}>
                     {roleList && roleList.map(item =>
                         <Select.Option value={item.fId} key={item.fId}>{item.fName}</Select.Option>
                     )}
@@ -110,10 +125,9 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
               </Form.Item>
               <Form.Item label="责任区域:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('areas', {
-                  initialValue: data.area_id && data.area_id.split(',').map((k, i) => ({value: k, label: data.area_name.split(',')[i]})),
-                  rules: [{ type: 'array' }],
+                  initialValue: data.area_id && data.area_id.split(',').map((k, i) => ({value: k, label: data.area_name.split(',')[i]}))
                 })(
-                    <StationSelect type="select" allowClear multiple/>
+                    <StationSelect type="select" allowClear multiple disabled={disabled}/>
                 )}
               </Form.Item>
             </Col>
@@ -122,22 +136,22 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
                 {getFieldDecorator('fTelephone1', {
                   initialValue: data.fTelephone1,
                   rules: [{ required: true, whitespace: true, message: '请输入联系手机！' }]
-                })(<Input maxLength="20"/>)}
+                })(<Input maxLength="20" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="备用手机:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fTelephone2',{
                   initialValue: data.fTelephone2,
-                })(<Input maxLength="20"/>)}
+                })(<Input maxLength="20" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="座机:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fGddh',{
                   initialValue: data.fGddh,
-                })(<Input maxLength="20"/>)}
+                })(<Input maxLength="20" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="备注:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fPad',{
                   initialValue: data.fPad,
-                })(<Input.TextArea autosize maxLength="50"/>)}
+                })(<Input.TextArea autosize maxLength="50" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="服务标志:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fFlag', {
@@ -146,7 +160,7 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
                     { required: true, whitespace: true, message: '请选择服务标志！' }
                   ],
                 })(
-                  <Radio.Group>
+                  <Radio.Group disabled={disabled}>
                     <Radio value="0">正常</Radio>
                     <Radio value="1">请假</Radio>
                   </Radio.Group>
@@ -157,7 +171,7 @@ import { Row, Col, Form, Input, Radio, Switch, Select, message } from 'antd'
                   valuePropName: 'checked',
                   initialValue: data.fState ? (data.fState === '0' ? true : false) : true,
                   rules: [{ required: true, message: '请选择有效性！' }],
-                })(<Switch/>)}
+                })(<Switch disabled={disabled}/>)}
               </Form.Item>
             </Col>
           </Row>

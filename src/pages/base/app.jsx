@@ -4,8 +4,7 @@ import Routes from '@/route'
 import '@/style/pages/app.scss'
 import Sider from '@/components/sider/index.jsx'
 import Header from '@/components/header/'
-import { Layout, BackTop } from 'antd';
-const { Content } = Layout;
+import { Layout, BackTop } from 'antd'
 
 class App extends React.Component {
 	state = {
@@ -35,26 +34,36 @@ class App extends React.Component {
   render() {
 		const { isSmallScreen, isMobile } = this.props.size;
   	return (
-  		<Layout style={{'flexDirection': isSmallScreen && 'column', height: '100%'}}>
+  		<Layout style={{'flexDirection': isSmallScreen && 'column', height: '100%'}} className="app-layout">
 				<Header toggle={this.toggle} collapsed={this.state.collapsed} style={{padding: isSmallScreen && '10px 0'}}/>
-				<Layout>
+				<Layout className="app-layout-main">
 					{!isMobile && <Sider collapsed={this.state.collapsed}/>}
-					<Layout>
-						<Content style={{padding: isSmallScreen && 0}}>
-								<Routes/> 
-							<BackTop/>
-						</Content>
-					</Layout>
+						<Routes/> 
+						<BackTop/>
 				</Layout>
 				{
-					isMobile && (   // 手机端对滚动很慢的处理 //flex布局模式改变
+					isMobile ? (   // 手机端对滚动很慢的处理 //flex布局模式改变
 						<style>
 						{`
 							#root{
 								height: auto!important;
 							}
-							.main-container {
+							.ant-layout-content {
 								padding: 10px!important;
+							}
+						`}
+						</style>
+					) : (
+						<style>
+						{`
+							::-webkit-scrollbar {
+								width: 6px;
+								height: 6px;
+							}
+							
+							::-webkit-scrollbar-thumb {
+								border-radius: 4px;
+								background-color: hsla(220,4%,58%,.3);
 							}
 						`}
 						</style>

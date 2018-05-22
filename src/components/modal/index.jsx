@@ -16,7 +16,7 @@ class CustomModal extends Component {
         {...this.props}>
         {this.props.children}
         {
-          isMobile && <style>{`
+          isMobile ? <style>{`
             .ant-modal {
               margin: 0;
               padding: 0;
@@ -29,6 +29,13 @@ class CustomModal extends Component {
             }
             .ant-modal-mask {
               background-color: #fff;
+            }
+          `}</style>
+          : <style>{`
+            .ant-modal-wrap {
+              display: flex;
+              align-items: center;
+              justify-content: center;
             }
           `}</style>
         }

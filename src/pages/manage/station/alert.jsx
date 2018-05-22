@@ -14,10 +14,16 @@ class Alert extends Component {
     loading: false,
     imageUrl: '',
     craftList: [],
-    deviceList: []
+    deviceList: [],
+    disabled: true,
+    title: '详情',
+    okText: '编辑'
   }
   componentDidMount() {
     this.initData()
+    this.props.data.isAdd && this.setState({
+      disabled: false, title: '添加', okText: '确定'
+    })
   }
   initData = async() => {
     const res =  await getCraftList()
@@ -55,15 +61,25 @@ class Alert extends Component {
       }));
     }
   }
-  onCancel = () => {
+  onCancel = (e) => {
+    if(this.state.title === '编辑' && e.currentTarget.className === 'ant-btn') {
+      this.setState({ 
+        disabled: true, title: '详情', okText: '编辑' 
+      })
+      return this.props.form.resetFields()
+    }
     this.props.trigger(false)
   }
   submitHandle = () => {
-    const { data } = this.props;
+    const { state: { disabled }, props: { data } } = this
+    if(disabled) {
+      this.setState({ disabled: false, title: '编辑', okText: '确定' })
+      return
+    }
     this.props.form.validateFields(async(err, values) => {
       if(err) return;
       const res = await common({
-        tradeCode: data.id ? 'station.updateByPrimaryKeySelective' : 'station.insertSelective',
+        tradeCode: data.isAdd ? 'station.insertSelective' : 'station.updateByPrimaryKeySelective',
         ...values,
         fBuilddate: values.fBuilddate.format('YYYY-MM-DD'),
         fAreaid: values.fAreaid.value,
@@ -73,17 +89,14 @@ class Alert extends Component {
       if(res.rspCode === '00') {
         message.success('操作成功！');
         this.props.trigger(true);
-      }else if(res.rspCode === '99') {
-        message.error('站点名已存在！');
       }else {
         message.error('系统繁忙，请稍后再试！');
       }
     })
   }
   render() {
-    const { craftList, loading, imageUrl } = this.state
+    const { craftList, loading, imageUrl, disabled, title, okText } = this.state
     const { data } = this.props
-    console.log(data)
     const { isMobile } = this.props.size
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
@@ -98,10 +111,11 @@ class Alert extends Component {
     )
     return (
       <Modal
-        title={ data.fPid ? '编辑' :'添加 '}
+        title={title}
+        okText={okText}
         visible={this.props.visible}
         onOk={this.submitHandle}
-        onCancel={this.onCancel}
+        onCancel={e => this.onCancel(e)}
         width="800px">
         <Form className="form">
           <Row gutter={20}>
@@ -110,97 +124,97 @@ class Alert extends Component {
                 {getFieldDecorator('fPid', {
                   initialValue: data.fPid,
                   rules: [{ required: true, whitespace: true, message: '请输入站点编号！' }]
-                })(<Input maxLength="20"/>)}
+                })(<Input maxLength="20" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="站点名称:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fName', {
                   initialValue: data.fName,
                   rules: [{ required: true, whitespace: true, message: '请输入站点名称！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="所属机构:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fBranchid', {
                   initialValue: data.fBranchid,
                   rules: [{ required: true, whitespace: true, message: '请选择所属机构！' }],
-                })(<Organization type="select" treeDefaultExpandAll/>)}
+                })(<Organization type="select" treeDefaultExpandAll disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="所属区域:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fAreaid', {
                   initialValue: data.fAreaid && { label: data.areaname, value: data.fAreaid },
                   rules: [{ required: true, whitespace: true, message: '请选择所属区域！', type: 'object' }],
-                })(<StationSelect type="select"/>)}
+                })(<StationSelect type="select" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="建设单位:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fBuildCompany', {
                   initialValue: data.fBuildCompany,
                   rules: [{ required: true, whitespace: true, message: '请输入建设单位！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="设计单位:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fDesignCompany', {
                   initialValue: data.fDesignCompany,
                   rules: [{ required: true, whitespace: true, message: '请输入设计单位！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="监管单位:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fSuperviseCompany', {
                   initialValue: data.fSuperviseCompany,
                   rules: [{ required: true, whitespace: true, message: '请输入设计单位！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="养护单位:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fMaintainCompany', {
                   initialValue: data.fMaintainCompany,
                   rules: [{ required: true, whitespace: true, message: '请输入设计单位！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="站点地址:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fAddress', {
                   initialValue: data.fAddress,
                   rules: [{ required: true, whitespace: true, message: '请输入站点地址！' }]
-                })(<Input.TextArea autosize maxLength="60"/>)}
+                })(<Input.TextArea autosize maxLength="60" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="经度:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fAddressjd', {
                   initialValue: data.fAddressjd,
                   rules: [{ required: true, whitespace: true, message: '请输入位置经度！' }]
-                })(<Input maxLength="20"/>)}
+                })(<Input maxLength="20" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="纬度:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fAddresswd', {
                   initialValue: data.fAddresswd,
                   rules: [{ required: true, whitespace: true, message: '请输入位置纬度！' }]
-                })(<Input maxLength="20"/>)}
+                })(<Input maxLength="20" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="建设日期:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fBuilddate', {
                   initialValue: (data.fBuilddate && data.fBuilddate.indexOf('-') > -1 && moment(data.fBuilddate, 'YYYY-MM-DD')) || undefined,
                   rules: [{  type: 'object', required: true, message: '请输入建设日期！' }]
-                })(<DatePicker style={{width: '100%'}} placeholder=""/>)}
+                })(<DatePicker style={{width: '100%'}} placeholder="" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="负责人:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('contname', {
                   initialValue: data.contname,
                   rules: [{ required: true, whitespace: true, message: '请输入负责人！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="负责人电话:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fConttel', {
                   initialValue: data.fConttel,
                   rules: [{ required: true, whitespace: true, message: '请输入负责人电话！' }]
-                })(<Input maxLength="20"/>)}
+                })(<Input maxLength="20" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="维护人:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fMaintainid', {
                   initialValue: data.fMaintainid,
                   rules: [{ required: true, whitespace: true, message: '请选择维护人！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="维护人电话:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fMaintaintel', {
                   initialValue: data.fMaintaintel,
                   rules: [{ required: true, whitespace: true, message: '请输入维护人电话！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
             </Col>
             <Col span={isMobile ? 24 : 12}>
@@ -208,19 +222,19 @@ class Alert extends Component {
                 {getFieldDecorator('fSerFamily', {
                   initialValue: data.fSerFamily,
                   rules: [{ required: true, whitespace: true, message: '请输入服务户数！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="服务人数:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fSerPeople', {
                   initialValue: data.fSerPeople,
                   rules: [{ required: true, whitespace: true, message: '请输入服务人数！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="工艺类型:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fTtype', {
                   initialValue: data.fTtype,
                   rules: [{ required: true, whitespace: true, message: '请选择工艺类型！' }]
-                })(<Select>
+                })(<Select disabled={disabled}>
                     {craftList.map( item => 
                         <Select.Option key={item.fId} value={item.fId}>{item.fName}</Select.Option>
                     )}
@@ -230,55 +244,55 @@ class Alert extends Component {
                 {getFieldDecorator('fWcount', {
                   initialValue: data.fWcount,
                   rules: [{ required: true, whitespace: true, message: '请输入处理水量！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="管网长度:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fClength', {
                   initialValue: data.fClength,
                   rules: [{ required: true, whitespace: true, message: '请输入管网长度！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="窖井个数:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fWellcount', {
                   initialValue: data.fWellcount,
                   rules: [{ required: true, whitespace: true, message: '请输入窖井个数！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="提升井数:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fPwcount', {
                   initialValue: data.fPwcount,
                   rules: [{ required: true, whitespace: true, message: '请输入提升井数！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="湿地个数:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fWetlandarea', {
                   initialValue: data.fWetlandarea,
                   rules: [{ required: true, whitespace: true, message: '请输入湿地个数！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="出水标准:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fEffluent', {
                   initialValue: data.fEffluent,
                   rules: [{ required: true, whitespace: true, message: '请输入出水标准！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="化粪池数:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fCesspool', {
                   initialValue: data.fCesspool,
                   rules: [{ required: true, whitespace: true, message: '请输入化粪池数！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="站点二维码:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fQrcode', {
                   initialValue: data.fQrcode,
                   rules: [{ required: true, whitespace: true, message: '请选择站点二维码！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="关联通讯设备:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fComDeviceid', {
                   initialValue: data.fComDeviceid,
                   rules: [{ required: true, whitespace: true, message: '请选择关联通讯设备！' }]
-                })(<DeviceType/>)}
+                })(<DeviceType disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="站点图片:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fPhotoOne', {
@@ -286,6 +300,7 @@ class Alert extends Component {
                   rules: [{ required: true, whitespace: true, message: '请选择站点图片！', type: 'object'}]
                 })(
                   <Upload
+                    disabled={disabled}
                     listType="picture-card"
                     className="avatar-uploader"
                     showUploadList={false}
@@ -308,7 +323,7 @@ class Alert extends Component {
                   initialValue: data.fRemark,
                   valuePropName: 'file',
                   rules: [{ required: true, whitespace: true, message: '请输入备注！' }]
-                })(<Input.TextArea autosize maxLength="60"/>)}
+                })(<Input.TextArea autosize maxLength="60" disabled={disabled}/>)}
               </Form.Item>
             </Col>
           </Row>

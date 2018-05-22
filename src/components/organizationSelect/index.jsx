@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import { TreeSelect, Tree } from 'antd'
+import { connect } from 'react-redux'
+import { TreeSelect, Tree, Layout } from 'antd'
 import { common } from '@/api'
+import './index.scss'
 
-export default class componentName extends Component {
+class OrganizationSelect extends Component {
   state = {
     treeData: [],
   }
@@ -18,14 +20,34 @@ export default class componentName extends Component {
   componentDidMount() {
     this.initData()
   }
+  renderTreeNodes = (data) => {
+    return data.map((item) => {
+      if (item.children) {
+        return (
+          <Tree.TreeNode title={item.label} key={item.value} dataRef={item}>
+            {this.renderTreeNodes(item.children)}
+          </Tree.TreeNode>
+        );
+      }
+      return <Tree.TreeNode title={item.label} key={item.value}/>
+    });
+  }
   render() {
-    const{ type } = this.props
+    const{ type, size } = this.props
     return (
       type === 'select' ? (
         <TreeSelect {...this.props} treeData={this.state.treeData}/>
       ) : (
-        <Tree {...this.props} treeData={this.state.treeData} />
+        size.isMobile ? null : <Layout.Sider width="180px">
+          <Tree {...this.props}>
+            {this.renderTreeNodes(this.state.treeData)}
+          </Tree>
+        </Layout.Sider>
       )
     )
   }
 }
+
+const mapStateToProps = state => state
+
+export default connect(mapStateToProps)(OrganizationSelect)

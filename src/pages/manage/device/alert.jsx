@@ -9,15 +9,35 @@ import moment from 'moment'
 import { Form, Input, DatePicker, message, Row, Col } from 'antd'
 
 class Alert extends Component {
-  onCancel = () => {
+  state = {
+    disabled: true,
+    title: '详情',
+    okText: '编辑'
+  }
+  componentDidMount() {
+    this.props.data.isAdd && this.setState({
+      disabled: false, title: '添加', okText: '确定'
+    })
+  }
+  onCancel = (e) => {
+    if(this.state.title === '编辑' && e.currentTarget.className === 'ant-btn') {
+      this.setState({ 
+        disabled: true, title: '详情', okText: '编辑' 
+      })
+      return this.props.form.resetFields()
+    }
     this.props.trigger(false)
   }
   submitHandle = () => {
-    const { data } = this.props;
+    const { state: { disabled }, props: { data } } = this
+    if(disabled) {
+      this.setState({ disabled: false, title: '编辑', okText: '确定' })
+      return
+    }
     this.props.form.validateFields(async(err, values) => {
       if(err) return;
       const res = await common({
-        tradeCode: data.fDeviceid ? 'station.updateByPrimaryKeySelective' : 'station.insertSelective',
+        tradeCode: data.isAdd ? 'station.insertSelective' : 'station.updateByPrimaryKeySelective',
         ...values,
         fScdate: values.fScdate.format('YYYY-MM-DD'),
         fAzdate: values.fAzdate.format('YYYY-MM-DD'),
@@ -34,8 +54,8 @@ class Alert extends Component {
     })
   }
   render() {
+    const { title, okText, disabled } = this.state
     const { data } = this.props
-    console.log(data)
     const { isMobile } = this.props.size
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
@@ -44,7 +64,8 @@ class Alert extends Component {
     }
     return (
       <Modal
-        title={ data.fDeviceid ? '编辑' :'添加 '}
+        title={title}
+        okText={okText}
         visible={this.props.visible}
         onOk={this.submitHandle}
         onCancel={this.onCancel}
@@ -56,49 +77,49 @@ class Alert extends Component {
                 {getFieldDecorator('fDeviceid', {
                   initialValue: data.fDeviceid,
                   rules: [{ required: true, whitespace: true, message: '请输入设备编号！' }]
-                })(<Input maxLength="20"/>)}
+                })(<Input maxLength="20" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="设备名称:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fDevname', {
                   initialValue: data.fDevname,
                   rules: [{ required: true, whitespace: true, message: '请输入设备名称！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="设备类别:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fDevtype', {
                   initialValue: data.fDevtype,
                   rules: [{ required: true, whitespace: true, message: '请选择设备类别！' }],
-                })(<DeviceType/>)}
+                })(<DeviceType disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="设备型号:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fDevmodel', {
                   initialValue: data.fDevmodel,
                   rules: [{ required: true, whitespace: true, message: '请输入设备型号！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="所属机构:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fBranchid', {
                   initialValue: data.fBranchid,
                   rules: [{ required: true, whitespace: true, message: '请选择所属机构！'}],
-                })(<Organization type="select" treeDefaultExpandAll/>)}
+                })(<Organization type="select" treeDefaultExpandAll disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="所属区域:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fAreaid', {
                   initialValue: data.fAreaid && { label: data.areaname, value: data.fAreaid },
                   rules: [{ required: true, whitespace: true, message: '请选择所属区域！', type: 'object' }],
-                })(<StationSelect type="select"/>)}
+                })(<StationSelect type="select" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="运维人员:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fContid', {
                   initialValue: data.fContid,
                   rules: [{ required: true, whitespace: true, message: '请输入运维人员！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="运维人员电话:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fConttel', {
                   initialValue: data.fConttel,
                   rules: [{ required: true, whitespace: true, message: '请输入运维人员电话！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
             </Col>
             <Col span={isMobile ? 24 : 12}>
@@ -106,50 +127,50 @@ class Alert extends Component {
                 {getFieldDecorator('fDevpower', {
                   initialValue: data.fDevpower,
                   rules: [{ required: true, whitespace: true, message: '请输入功率！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="流量:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fDevflow', {
                   initialValue: data.fDevflow,
                   rules: [{ required: true, whitespace: true, message: '请输入流量！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="扬程:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fDevyc', {
                   initialValue: data.fDevyc,
                   rules: [{ required: true, whitespace: true, message: '请输入扬程！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="厂家:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fFactory', {
                   initialValue: data.fFactory,
                   rules: [{ required: true, whitespace: true, message: '请输入厂家！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="使用年限:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fSerlife', {
                   initialValue: data.fSerlife,
                   rules: [{ required: true, whitespace: true, message: '请输入使用年限！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="建设日期:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fScdate', {
                   initialValue: (data.fScdate && data.fScdate.indexOf('-') > -1 && moment(data.fScdate, 'YYYY-MM-DD')) || undefined,
                   rules: [{  type: 'object', required: true, message: '请输入建设日期！' }]
-                })(<DatePicker style={{width: '100%'}} placeholder=""/>)}
+                })(<DatePicker style={{width: '100%'}} placeholder="" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="安装日期:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fAzdate', {
                   initialValue: (data.fAzdate && data.fAzdate.indexOf('-') > -1 && moment(data.fAzdate, 'YYYY-MM-DD')) || undefined,
                   rules: [{ type: 'object', required: true, whitespace: true, message: '请输入安装日期！' }]
-                })(<DatePicker style={{width: '100%'}} placeholder=""/>)}
+                })(<DatePicker style={{width: '100%'}} placeholder="" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="备注:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fRemark', {
                   initialValue: data.fRemark,
                   valuePropName: 'file',
                   rules: [{ required: true, whitespace: true, message: '请输入备注！' }]
-                })(<Input.TextArea autosize maxLength="60"/>)}
+                })(<Input.TextArea autosize maxLength="60" disabled={disabled}/>)}
               </Form.Item>
             </Col>
           </Row>

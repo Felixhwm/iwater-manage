@@ -6,15 +6,35 @@ import { common } from '@/api'
 import { Form, Input, Radio, message, Row, Col } from 'antd'
 
 class Alert extends Component {
-  onCancel = () => {
+  state = {
+    disabled: true,
+    title: '详情',
+    okText: '编辑'
+  }
+  componentDidMount() {
+    this.props.data.isAdd && this.setState({
+      disabled: false, title: '添加', okText: '确定'
+    })
+  }
+  onCancel = (e) => {
+    if(this.state.title === '编辑' && e.currentTarget.className === 'ant-btn') {
+      this.setState({ 
+        disabled: true, title: '详情', okText: '编辑' 
+      })
+      return this.props.form.resetFields()
+    }
     this.props.trigger(false)
   }
   submitHandle = () => {
-    const { data } = this.props;
+    const { state: { disabled }, props: { data } } = this
+    if(disabled) {
+      this.setState({ disabled: false, title: '编辑', okText: '确定' })
+      return
+    }
     this.props.form.validateFields(async(err, values) => {
       if(err) return;
       const res = await common({
-        tradeCode: data.id ? 'branch.updateByPrimaryKeySelective' : 'branch.insertSelective',
+        tradeCode: data.isAdd ? 'branch.insertSelective' : 'branch.updateByPrimaryKeySelective',
         ...values,
         id: values.id || data.id
       })
@@ -29,6 +49,7 @@ class Alert extends Component {
     })
   }
   render() {
+    const { title, okText, disabled } = this.state
     const { data } = this.props
     const { isMobile } = this.props.size
     const { getFieldDecorator } = this.props.form
@@ -38,10 +59,11 @@ class Alert extends Component {
     }
     return (
       <Modal
-        title={ data.fPid ? '编辑' :'添加 '}
+        title={title}
+        okText={okText}
         visible={this.props.visible}
         onOk={this.submitHandle}
-        onCancel={this.onCancel}
+        onCancel={e => this.onCancel(e)}
         width="700px">
         <Form className="form">
           <Row gutter={20}>
@@ -50,26 +72,26 @@ class Alert extends Component {
                 {getFieldDecorator('id', {
                   initialValue: data.id,
                   rules: [{ required: true, whitespace: true, message: '请输入机构编号！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="机构名称:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('label', {
                   initialValue: data.label,
                   rules: [{ required: true, whitespace: true, message: '请输入机构名称！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="所属机构:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fBranchid', {
                   initialValue: data.fBranchid,
                   rules: [{ required: true, whitespace: true, message: '请选择所属机构！' }],
-                })(<Organization type="select" treeDefaultExpandAll/>)}
+                })(<Organization type="select" treeDefaultExpandAll disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="机构性质:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fPropty', {
                   initialValue: data.fPropty,
                   rules: [{ required: true, whitespace: true, message: '请选择机构性质！' }]
                 })(
-                  <Radio.Group>
+                  <Radio.Group disabled={disabled}>
                     <Radio value="0">直营</Radio>
                     <Radio value="1">加盟</Radio>
                   </Radio.Group>
@@ -80,7 +102,7 @@ class Alert extends Component {
                   initialValue: data.fState,
                   rules: [{ required: true, whitespace: true, message: '请选择机构状态！' }]
                 })(
-                  <Radio.Group>
+                  <Radio.Group disabled={disabled}>
                     <Radio value="0">正常</Radio>
                     <Radio value="1">维护</Radio>
                     <Radio value="2">无效</Radio>
@@ -91,7 +113,7 @@ class Alert extends Component {
                 {getFieldDecorator('fAddress', {
                   initialValue: data.fAddress,
                   rules: [{ required: true, whitespace: true, message: '请输入联系地址！' }]
-                })(<Input.TextArea maxLength="50" rows={2}/>)}
+                })(<Input.TextArea maxLength="50" rows={2} disabled={disabled}/>)}
               </Form.Item>
             </Col>
             <Col span={isMobile ? 24 : 12}>
@@ -99,30 +121,30 @@ class Alert extends Component {
                 {getFieldDecorator('fAddressjd', {
                   initialValue: data.fAddressjd,
                   rules: [{ required: true, whitespace: true, message: '请输入位置经度！' }]
-                })(<Input maxLength="20"/>)}
+                })(<Input maxLength="20" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="位置纬度:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fAddresswd', {
                   initialValue: data.fAddresswd,
                   rules: [{ required: true, whitespace: true, message: '请输入位置纬度！' }]
-                })(<Input maxLength="20"/>)}
+                })(<Input maxLength="20" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="联系人:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fContnm', {
                   initialValue: data.fContnm,
                   rules: [{ required: true, whitespace: true, message: '请输入联系人！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="联系电话:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fConttel', {
                   initialValue: data.fConttel,
                   rules: [{ required: true, whitespace: true, message: '请输入联系电话！' }]
-                })(<Input maxLength="16"/>)}
+                })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>        
               <Form.Item label="备注:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fPad', {
                   initialValue: data.fPad
-                })(<Input.TextArea maxLength="50" rows={2}/>)}
+                })(<Input.TextArea maxLength="50" rows={2} disabled={disabled}/>)}
               </Form.Item>
             </Col>
           </Row>

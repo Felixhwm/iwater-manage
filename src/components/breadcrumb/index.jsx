@@ -1,19 +1,19 @@
 import React from 'react'
-import { Breadcrumb } from 'antd'
+import { Breadcrumb, Layout } from 'antd'
 import './index.scss'
 
 export default class App extends React.Component {
   render() {
     const { first, second } = this.props
     return (
-      <div className="flex_ca breadcrumb-container">
+      <Layout.Header className="flex_ca breadcrumb-container" {...this.props}>
         <Breadcrumb separator=">">
           <Breadcrumb.Item>当前位置：</Breadcrumb.Item>
           <Breadcrumb.Item className="first">{first}</Breadcrumb.Item>
           <Breadcrumb.Item className="last">{second}</Breadcrumb.Item>
         </Breadcrumb>
         {this.props.children}
-      </div>
+      </Layout.Header>
     )
   }
 }
