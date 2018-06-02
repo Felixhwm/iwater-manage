@@ -5,7 +5,7 @@ import MainHanle from '@/components/mainHandle'
 import Pagination from '@/components/pagination'
 import Delete from '@/components/delete'
 import Alert from './alert'
-import { getSetList, deleteSet, searchSet } from '@/api'
+import { getSetList, deleteSet } from '@/api'
 import { Table, Layout } from 'antd'
 
 class Set extends Component {
@@ -30,13 +30,10 @@ class Set extends Component {
     })
   }
   searchHandle = async(condition) => {
-    const res = await searchSet({
-      condition
+    await this.setState({
+      searchData: {...this.state.searchData, pageNum: 1 ,condition}
     })
-    this.setState({
-      setList: res.data.list,
-      total: res.data.total
-    })
+    this.initData()
   }
   pageChangeHandle = async(pageNum) => {
     await this.setState({

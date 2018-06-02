@@ -4,7 +4,7 @@ import MainHanle from '@/components/mainHandle'
 import Pagination from '@/components/pagination'
 import Delete from '@/components/delete'
 import Alert from './alert'
-import { getBranchList, deleteBranch, searchBranch } from '@/api'
+import { getBranchList, deleteBranch } from '@/api'
 import { Table, Layout } from 'antd'
 
 class Branch extends Component {
@@ -29,13 +29,10 @@ class Branch extends Component {
     })
   }
   searchHandle = async(condition) => {
-    const res = await searchBranch({
-      condition
+    await this.setState({
+      searchData: {...this.state.searchData, pageNum: 1 ,condition}
     })
-    this.setState({
-      branchList: res.data.list,
-      total: res.data.total
-    })
+    this.initData()
   }
   pageChangeHandle = async(pageNum) => {
     await this.setState({
@@ -73,8 +70,9 @@ class Branch extends Component {
     const { visible, branchList, rowData, total, searchData } = this.state;
     return (
       <Layout>
-        <Breadcrumb first="管理平台" second="角色管理"/>
+        <Breadcrumb first="管理平台" second="机构管理"/>
         <Layout>
+          { visible && <div></div> }
           <Layout.Content>
             <MainHanle onAdd={() => this.showAlert()} onDelete={this.deleteHandle} onSearch={this.searchHandle}/>
             <Table 

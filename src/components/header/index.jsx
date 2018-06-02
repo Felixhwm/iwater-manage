@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import './index.scss'
-import { Menu, Layout, Icon, Popover, Divider, Dropdown } from 'antd';
+import { Menu, Layout, Icon, Popover, Divider, Dropdown, Modal } from 'antd';
 import Sider from '@/components/sider/index.jsx'
 const Header = Layout.Header;
 
@@ -24,7 +25,13 @@ class TopHeader extends Component {
     const { key } = item;
     switch(key) {
       case 'logout':
-        this.props.history.replace('/login');
+      Modal.confirm({
+        title: '提示',
+        content: '您确定要退出到登录页吗？',
+        onOk: () => {
+          this.props.history.replace('/login');
+        }
+      })
         return
       default :
       return
@@ -56,14 +63,14 @@ class TopHeader extends Component {
           <div>公告</div>
         }
         <div>
-          <a href="###">帮助</a>
+          <a>帮助</a>
           <Divider type="vertical"/>
-          <a href="###">使用说明</a>
+          <a>使用说明</a>
           <Divider type="vertical"/>
           <Dropdown overlay={
-            <Menu>
-              <Menu.Item key="setting:1">你好 - </Menu.Item>
-              <Menu.Item key="setting:2">个人信息</Menu.Item>
+            <Menu onClick={this.menuClick}>
+              <Menu.Item key="setting:1">个人信息</Menu.Item>
+              <Menu.Item key="setting:2">修改密码</Menu.Item>
               <Menu.Item key="logout"><span>退出登录</span></Menu.Item>
             </Menu>
           }>
@@ -85,4 +92,4 @@ class TopHeader extends Component {
 
 const mapStateToProps = state => state
 
-export default connect(mapStateToProps)(TopHeader);
+export default connect(mapStateToProps)(withRouter(TopHeader));

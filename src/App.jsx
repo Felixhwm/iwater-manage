@@ -1,11 +1,21 @@
 import React from 'react';
-import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { HashRouter , Route, Switch, Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { windowResize } from '@/store/actions'
-import Login from './pages/base/login';
-import App from './pages/base/app';
+import Login from './pages/base/login/';
+import App from './pages/base/app/';
 import './App.css'
+
+// const RouterContainer = () => {
+//   return (
+//     process.env.NODE_ENV === 'development' ? <BrowserRouter>
+//       {this.props.children}
+//     </BrowserRouter> : <HashRouter>
+//       {this.props.children}
+//     </HashRouter>
+//   )
+// }
 
 class component extends React.Component {
   componentDidMount() {
@@ -23,13 +33,13 @@ class component extends React.Component {
 	}
   render() {
     return ( 
-      <Router>
+      <HashRouter>
         <Switch>
           <Route exact path="/" render={() => <Redirect to="/login" push />} />     
           <Route path="/login" component={Login} />   
           <Route path="/app" component={App} />
         </Switch>
-      </Router>
+      </HashRouter>
     )
   }
 }

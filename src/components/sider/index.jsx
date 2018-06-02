@@ -88,7 +88,7 @@ class app extends React.Component {
     return(
       <Sider
         className="sider"
-        breakpoint="lg"
+        breakpoint="md"
         width={160}
         trigger={null}
         collapsible

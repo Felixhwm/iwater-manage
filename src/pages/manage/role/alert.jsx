@@ -43,11 +43,13 @@ class App extends Component {
         fRoleMenu: checkedKeys ? checkedKeys.toString() : '',
         fRoleid: data.fRoleid
       })
-      if(res.rspCode === '00') {
-        message.success('操作成功！');
-        this.props.trigger(true);
-      }else {
-        message.error('系统繁忙，请稍后再试！');
+      if (res.rspCode === '00') {
+        message.success('操作成功！')
+        this.props.trigger(true)
+      } else if (res.rspCode === '99') {
+        message.error('角色名称已存在，请重新输入！')
+      } else {
+        message.error('系统繁忙，请稍后再试！')
       }
     })
   }

@@ -47,7 +47,7 @@ export default class Routes extends React.Component {
 				<Route exact path="/app/manage/faultType" component={FaultType}/>
 				<Route exact path="/app/manage/set" component={Set}/>
 				<Route exact path="/app/manage/water" component={Water}/>
-				<Route exact path="/app/manage/threshold" component={Threshold}/>
+				<Route path="/app/manage/threshold" component={Threshold}/>
 		    <Redirect from="/app" to="/app/index"/>
 		  </Switch>
 		)

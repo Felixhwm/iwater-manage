@@ -4,7 +4,7 @@ import Modal from '@/components/modal'
 import Organization from '@/components/organizationSelect'
 import StationSelect from '@/components/stationSelect'
 import DeviceType from '@/components/deviceType'
-import { common, getCraftList } from '@/api'
+import { common, getCraftList, getStandardName } from '@/api'
 import moment from 'moment'
 import { baseUrl } from '@/api/request.js'
 import { Form, Input, Select, DatePicker, Upload, message, Row, Col, Icon } from 'antd'
@@ -14,6 +14,7 @@ class Alert extends Component {
     loading: false,
     imageUrl: '',
     craftList: [],
+    standardNameList: [],
     deviceList: [],
     disabled: true,
     title: '详情',
@@ -26,13 +27,15 @@ class Alert extends Component {
     })
   }
   initData = async() => {
-    const res =  await getCraftList()
+    const res = await Promise.all([getCraftList(), getStandardName()])
+    console.log(res)
     this.setState({
-      craftList: res.listInfo
+      craftList: res[0].listInfo,
+      standardNameList: res[1].data
     })
   }
   beforeUpload = (file) => {
-    const isJPG = file.type === 'image/jpeg';
+    const isJPG = file.type.includes('image');
     if (!isJPG) {
       message.error('只能上传图片！');
     }
@@ -84,7 +87,8 @@ class Alert extends Component {
         fBuilddate: values.fBuilddate.format('YYYY-MM-DD'),
         fAreaid: values.fAreaid.value,
         fPhotoOne: values.fPhotoOne.file.response.fPic1,
-        fPid: values.fPid
+        fPid: data.fPid,
+        ofPid: data.fPid,
       })
       if(res.rspCode === '00') {
         message.success('操作成功！');
@@ -95,7 +99,7 @@ class Alert extends Component {
     })
   }
   render() {
-    const { craftList, loading, imageUrl, disabled, title, okText } = this.state
+    const { craftList, standardNameList, loading, imageUrl, disabled, title, okText } = this.state
     const { data } = this.props
     const { isMobile } = this.props.size
     const { getFieldDecorator } = this.props.form
@@ -192,10 +196,10 @@ class Alert extends Component {
                   rules: [{  type: 'object', required: true, message: '请输入建设日期！' }]
                 })(<DatePicker style={{width: '100%'}} placeholder="" disabled={disabled}/>)}
               </Form.Item>
-              <Form.Item label="负责人:" {...formItemLayout} colon={false}>
-                {getFieldDecorator('contname', {
-                  initialValue: data.contname,
-                  rules: [{ required: true, whitespace: true, message: '请输入负责人！' }]
+              <Form.Item label="负责人编号:" {...formItemLayout} colon={false}>
+                {getFieldDecorator('fContid', {
+                  initialValue: data.fContid,
+                  rules: [{ required: true, whitespace: true, message: '请输入负责人编号！' }]
                 })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="负责人电话:" {...formItemLayout} colon={false}>
@@ -271,11 +275,17 @@ class Alert extends Component {
                 })(<Input maxLength="16" disabled={disabled}/>)}
               </Form.Item>
               <Form.Item label="出水标准:" {...formItemLayout} colon={false}>
-                {getFieldDecorator('fEffluent', {
-                  initialValue: data.fEffluent,
-                  rules: [{ required: true, whitespace: true, message: '请输入出水标准！' }]
-                })(<Input maxLength="16" disabled={disabled}/>)}
-              </Form.Item>
+                    {getFieldDecorator('fEffluent', {
+                      initialValue: data.fEffluent,
+                      rules: [{ required: true, whitespace: true, message: '请选择出水标准！' }]
+                    })(<Select disabled={disabled} showSearch filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
+                      {
+                        standardNameList.map(item => 
+                          <Select.Option key={item.fId} value={item.fStandardname}>{item.fStandardname}</Select.Option>
+                        )
+                      }
+                    </Select>)}
+                  </Form.Item>
               <Form.Item label="化粪池数:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fCesspool', {
                   initialValue: data.fCesspool,
@@ -308,15 +318,9 @@ class Alert extends Component {
                     beforeUpload={this.beforeUpload}
                     onChange={this.handleChange}
                   >
-                    {imageUrl ? <img src={imageUrl} alt="" width="100%"/> : uploadButton}
+                    {imageUrl ? <img src={imageUrl} alt=""/> : uploadButton}
                   </Upload>
                 )}
-                <style>{`
-                  .avatar-uploader > .ant-upload {
-                    width: 128px;
-                    height: 128px;
-                  }
-                `}</style>
               </Form.Item>
               <Form.Item label="备注:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fRemark', {

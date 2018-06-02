@@ -5,7 +5,7 @@ import MainHanle from '@/components/mainHandle'
 import Pagination from '@/components/pagination'
 import Delete from '@/components/delete'
 import Alert from './alert'
-import { getRoleList, deleteRole, searchRole } from '@/api'
+import { getRoleList, deleteRole } from '@/api'
 import { Table, Layout } from 'antd'
 
 class Role extends Component {
@@ -16,29 +16,23 @@ class Role extends Component {
     total: null,
     searchData: {
       pageNum: 1,
-      limit: 10
+      limit: 17,
+      condition: ''
     },
     selectedRowKeys: []
   }
   initData = async() => {
-    const { pageNum, limit } = this.state.searchData;
-    const res = await getRoleList({
-      pageNum,
-      limit
-    });
+    const res = await getRoleList({...this.state.searchData});
     this.setState({
       roleList: res.data.list,
       total: res.data.total
     })
   }
   searchHandle = async(condition) => {
-    const res = await searchRole({
-      condition
+    await this.setState({
+      searchData: {...this.state.searchData, pageNum: 1 ,condition}
     })
-    this.setState({
-      roleList: res.data.list,
-      total: res.data.total
-    })
+    this.initData()
   }
   pageChangeHandle = async(pageNum) => {
     await this.setState({

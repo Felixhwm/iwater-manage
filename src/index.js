@@ -20,10 +20,10 @@ const render = Component => {
   	<LocaleProvider locale={zhCN}>
 	    <AppContainer>
         <Provider store={store}>
-	        <Component></Component>
+	        <Component/>
         </Provider>
 	    </AppContainer>
-	</LocaleProvider>,
+	  </LocaleProvider>,
     document.getElementById('root')
   )
 }
@@ -36,3 +36,4 @@ if(module.hot) {
   });
 }
 registerServiceWorker();
+

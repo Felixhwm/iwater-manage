@@ -36,8 +36,6 @@ class Alert extends Component {
       if(res.rspCode === '00') {
         message.success('操作成功！');
         this.props.trigger(true);
-      }else if(res.rspCode === '99') {
-        message.error('故障编号已存在！');
       }else {
         message.error('系统繁忙，请稍后再试！');
       }
@@ -73,10 +71,10 @@ class Alert extends Component {
         onCancel={e => this.onCancel(e)}
         width="500px">
         <Form className="form">
-          <Form.Item label="故障类型:" {...formItemLayout} colon={false}>
+          <Form.Item label="故障大类:" {...formItemLayout} colon={false}>
             {getFieldDecorator('fCalssid', {
               initialValue: data.fCalssid,
-              rules: [{ required: true, whitespace: true, message: '请选择故障类型！' }]
+              rules: [{ required: true, whitespace: true, message: '请选择故障大类！' }]
             })(<Select disabled={disabled}>
               {
                 bigFault.map(item => 
@@ -85,10 +83,10 @@ class Alert extends Component {
               }
             </Select>)}
           </Form.Item>
-          <Form.Item label="故障部位:" {...formItemLayout} colon={false}>
+          <Form.Item label="故障小类:" {...formItemLayout} colon={false}>
             {getFieldDecorator('fPartid', {
               initialValue: data.fPartid,
-              rules: [{ required: true, whitespace: true, message: '请选择故障部位！' }]
+              rules: [{ required: true, whitespace: true, message: '请选择故障小类！' }]
             })(<Select disabled={disabled}>
               {
                 smallFault.map(item => 
@@ -106,13 +104,11 @@ class Alert extends Component {
           <Form.Item label="解决方案:" {...formItemLayout} colon={false}>
             {getFieldDecorator('fSolution', {
               initialValue: data.fSolution,
-              rules: [{ required: true, whitespace: true, message: '请输入解决方案！' }]
             })(<Input maxLength="20" disabled={disabled}/>)}
           </Form.Item>
           <Form.Item label="备注:" {...formItemLayout} colon={false}>
             {getFieldDecorator('fPad', {
               initialValue: data.fPad,
-              rules: [{ required: true, whitespace: true, message: '请输入备注！' }]
             })(<Input.TextArea rows={2} maxLength="50" disabled={disabled}/>)}
           </Form.Item>
         </Form>

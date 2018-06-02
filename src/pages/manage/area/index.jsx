@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getAreaList, deleteArea, searchArea } from '@/api'
+import { getAreaList, deleteArea } from '@/api'
 import Breadcrumb from '@/components/breadcrumb'
 import MainHanle from '@/components/mainHandle'
 import Pagination from '@/components/pagination'
@@ -13,7 +13,7 @@ export default class componentName extends Component {
     areaList: [],
     total: null,
     searchData: {
-      limit: 16,
+      limit: 17,
       pageNum: 1,
       fAreaid: ''
     },
@@ -35,13 +35,10 @@ export default class componentName extends Component {
     })
   }
   searchHandle = async(condition) => {
-    const res = await searchArea({
-      condition
+    await this.setState({
+      searchData: {...this.state.searchData, pageNum: 1 ,condition}
     })
-    this.setState({
-      areaList: res.data.list,
-      total: res.data.total
-    })
+    this.initData()
   }
   treeSelect = async(val) => {
     await this.setState({
@@ -73,6 +70,13 @@ export default class componentName extends Component {
       visible: false
     })
     if(ok) this.initData();
+  }
+  rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      this.setState({
+        selectedRowKeys
+      })
+    },
   }
   render() {
     const { areaList, visible, rowData, total, searchData } = this.state

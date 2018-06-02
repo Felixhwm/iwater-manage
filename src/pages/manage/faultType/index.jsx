@@ -5,8 +5,7 @@ import MainHanle from '@/components/mainHandle'
 import Pagination from '@/components/pagination'
 import Delete from '@/components/delete'
 import Alert from './alert'
-import StationSelect from '@/components/stationSelect/'
-import { getFaultTypeList, deleteFaultType, searchFaultType } from '@/api'
+import { getFaultTypeList, deleteFaultType } from '@/api'
 import { Table, Layout } from 'antd'
 
 class FaultType extends Component {
@@ -31,13 +30,10 @@ class FaultType extends Component {
     })
   }
   searchHandle = async(condition) => {
-    const res = await searchFaultType({
-      condition
+    await this.setState({
+      searchData: {...this.state.searchData, pageNum: 1 ,condition}
     })
-    this.setState({
-      faultTypeList: res.data.list,
-      total: res.data.total
-    })
+    this.initData()
   }
   pageChangeHandle = async(pageNum) => {
     await this.setState({

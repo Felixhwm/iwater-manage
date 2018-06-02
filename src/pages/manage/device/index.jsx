@@ -5,7 +5,7 @@ import Pagination from '@/components/pagination'
 import Delete from '@/components/delete'
 import Alert from './alert'
 import StationSelect from '@/components/stationSelect/'
-import { getDeviceList, deleteDevice, searchDevice } from '@/api'
+import { getDeviceList, deleteDevice } from '@/api'
 import { Table, Layout } from 'antd'
 
 class Device extends Component {
@@ -40,13 +40,10 @@ class Device extends Component {
     this.initData()
   }
   searchHandle = async(condition) => {
-    const res = await searchDevice({
-      condition
+    await this.setState({
+      searchData: {...this.state.searchData, pageNum: 1 ,condition}
     })
-    this.setState({
-      deviceList: res.data.list,
-      total: res.data.total
-    })
+    this.initData()
   }
   pageChangeHandle = async(pageNum) => {
     await this.setState({

@@ -1,40 +1,33 @@
 .bg {
 	height: 100%;
-	background: url('../imgs/bg.jpg') no-repeat 0 0;
-	background-size: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	background: url('~@/style/imgs/bg.jpg') no-repeat center left;
 	.logo-name {
 		position: absolute;
 		left: 0;
 		top: 0;
 	}
+	.form-forget {
+		text-align: right;
+		cursor: pointer;
+		margin-bottom: 20px;
+	}
 	.login-form {
-		width: 330px;
 	  padding: 40px;
 	  border-radius: 10px;
 	  box-shadow: #666 0px 0px 10px;
-	  background-color: #fff;
+		background-color: rgba($color: #fff, $alpha: 0.7);
 	  .logo1 {
-	  	width: 50%;
+	  	width: 70%;
 	  	display: block;
-	  	margin: 0 auto;
-	  }
-	  .logo2 {
-	  	width: 100%;
-	  	margin: 25px auto;
+	  	margin: 0 auto 40px auto;
 	  }
 	}
-	.ant-form-item {
-		margin-bottom: 16px;
-	}
-	.ant-form-item-with-help {
-		margin-bottom: 0;
-		.ant-form-explain {
-			font-size: 12px;
-		}
-	}
+	// .ant-form-item-with-help {
+	// 	margin-bottom: 0;
+	// 	.ant-form-explain {
+	// 		font-size: 12px;
+	// 	}
+	// }
 	.login-form-forgot {
 	  float: right;
 	}

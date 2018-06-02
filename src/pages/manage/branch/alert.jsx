@@ -36,13 +36,11 @@ class Alert extends Component {
       const res = await common({
         tradeCode: data.isAdd ? 'branch.insertSelective' : 'branch.updateByPrimaryKeySelective',
         ...values,
-        id: values.id || data.id
+        id: data.id
       })
       if(res.rspCode === '00') {
         message.success('操作成功！');
         this.props.trigger(true);
-      }else if(res.rspCode === '99') {
-        message.error('机构名已存在！');
       }else {
         message.error('系统繁忙，请稍后再试！');
       }
@@ -113,7 +111,7 @@ class Alert extends Component {
                 {getFieldDecorator('fAddress', {
                   initialValue: data.fAddress,
                   rules: [{ required: true, whitespace: true, message: '请输入联系地址！' }]
-                })(<Input.TextArea maxLength="50" rows={2} disabled={disabled}/>)}
+                })(<Input.TextArea maxLength="50" disabled={disabled} autosize/>)}
               </Form.Item>
             </Col>
             <Col span={isMobile ? 24 : 12}>
@@ -144,7 +142,7 @@ class Alert extends Component {
               <Form.Item label="备注:" {...formItemLayout} colon={false}>
                 {getFieldDecorator('fPad', {
                   initialValue: data.fPad
-                })(<Input.TextArea maxLength="50" rows={2} disabled={disabled}/>)}
+                })(<Input.TextArea maxLength="50" autosize disabled={disabled}/>)}
               </Form.Item>
             </Col>
           </Row>

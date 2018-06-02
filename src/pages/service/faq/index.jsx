@@ -7,7 +7,7 @@ import Detail from '@/pages/service/faq/detail';
 export default class Index extends Component {
   render() {
     return (
-      <div>
+      <div className="service-faq">
         <Route exact path="/app/service/faqs" component={List}/>
 				<Route exact path="/app/service/faqs/detail/:faqId" component={Detail}/>
       </div>

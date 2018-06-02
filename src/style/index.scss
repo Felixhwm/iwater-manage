@@ -51,6 +51,7 @@ body {
 		height: 18px;
 		margin-right: 2px;
 		vertical-align: sub;
+		background-repeat: no-repeat;
 	}
 	span {
 		vertical-align: text-bottom;
@@ -66,9 +67,17 @@ textarea.ant-input {
 .ant-form-item-label {
 	line-height: 39.9999px!important;
 	padding-bottom: 0!important;
+	//text-align: right!important;
 }
 .ant-confirm {
 	top: 200px!important;
+}
+.avatar-uploader > .ant-upload {
+	width: 128px;
+	height: 128px;
+	img {
+		width: 100%;
+	}
 }
 // ::-webkit-scrollbar {
 // 	width: 6px;

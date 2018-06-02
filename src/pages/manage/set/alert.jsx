@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 import Modal from '@/components/modal'
-import { common, getFaultBig, getFaultSmall } from '@/api'
-import { Form, Input, Select, message } from 'antd'
+import { common } from '@/api'
+import { Form, Input, message } from 'antd'
 
 class Alert extends Component {
   state = {
-    bigFault: [],
-    smallFault: [],
     disabled: true,
     title: '详情',
     okText: '编辑'
@@ -29,9 +27,10 @@ class Alert extends Component {
     this.props.form.validateFields(async(err, values) => {
       if(err) return;
       const res = await common({
-        tradeCode: data.isAdd ? 'faulttype.insertSelective' : 'faulttype.updateByPrimaryKeySelective',
+        tradeCode: data.isAdd ? 'code.insertSelective' : 'code.updateByPrimaryKeySelective',
         ...values,
-        oid: data.id
+        ofCatid: values.fCatid,
+        ofId: values.fId
       })
       if(res.rspCode === '00') {
         message.success('操作成功！');
@@ -41,21 +40,13 @@ class Alert extends Component {
       }
     })
   }
-  initData = async() => {
-    const res =await Promise.all([getFaultBig(), getFaultSmall()])
-    this.setState({
-      bigFault: res[0].listInfo,
-      smallFault: res[1].listInfo
-    })
-  }
   componentDidMount() {
-    this.initData()
     this.props.data.isAdd && this.setState({
       disabled: false, title: '添加', okText: '确定'
     })
   }
   render() {
-    const { bigFault, smallFault, disabled, title, okText } = this.state
+    const { disabled, title, okText } = this.state
     const { data } = this.props
     const { getFieldDecorator } = this.props.form
     const formItemLayout = {
@@ -71,45 +62,33 @@ class Alert extends Component {
         onCancel={e => this.onCancel(e)}
         width="500px">
         <Form className="form">
-          <Form.Item label="故障类型:" {...formItemLayout} colon={false}>
-            {getFieldDecorator('fCalssid', {
-              initialValue: data.fCalssid,
-              rules: [{ required: true, whitespace: true, message: '请选择故障类型！' }]
-            })(<Select disabled={disabled}>
-              {
-                bigFault.map(item => 
-                  <Select.Option key={item.fId} value={item.fId}>{item.fName}</Select.Option>
-                )
-              }
-            </Select>)}
-          </Form.Item>
-          <Form.Item label="故障部位:" {...formItemLayout} colon={false}>
-            {getFieldDecorator('fPartid', {
-              initialValue: data.fPartid,
-              rules: [{ required: true, whitespace: true, message: '请选择故障部位！' }]
-            })(<Select disabled={disabled}>
-              {
-                smallFault.map(item => 
-                  <Select.Option key={item.fId} value={item.fId}>{item.fName}</Select.Option>
-                )
-              }
-            </Select>)}
-          </Form.Item>
-          <Form.Item label="故障编号:" {...formItemLayout} colon={false}>
-            {getFieldDecorator('fFaultnum', {
-              initialValue: data.fFaultnum,
-              rules: [{ required: true, whitespace: true, message: '请输入故障编号！' }]
+          <Form.Item label="分类代码:" {...formItemLayout} colon={false}>
+            {getFieldDecorator('fCatid', {
+              initialValue: data.fCatid,
+              rules: [{ required: true, whitespace: true, message: '请输入分类代码！' }]
             })(<Input maxLength="20" disabled={disabled}/>)}
           </Form.Item>
-          <Form.Item label="解决方案:" {...formItemLayout} colon={false}>
+          <Form.Item label="代码:" {...formItemLayout} colon={false}>
+            {getFieldDecorator('fId', {
+              initialValue: data.fId,
+              rules: [{ required: true, whitespace: true, message: '请输入代码！' }]
+            })(<Input maxLength="20" disabled={disabled}/>)}
+          </Form.Item>
+          <Form.Item label="代码名称:" {...formItemLayout} colon={false}>
+            {getFieldDecorator('fName', {
+              initialValue: data.fName,
+              rules: [{ required: true, whitespace: true, message: '请输入代码名称！' }]
+            })(<Input maxLength="20" disabled={disabled}/>)}
+          </Form.Item>
+          {/* <Form.Item label="解决方案:" {...formItemLayout} colon={false}>
             {getFieldDecorator('fSolution', {
               initialValue: data.fSolution,
               rules: [{ required: true, whitespace: true, message: '请输入解决方案！' }]
             })(<Input maxLength="20" disabled={disabled}/>)}
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item label="备注:" {...formItemLayout} colon={false}>
-            {getFieldDecorator('fPad', {
-              initialValue: data.fPad,
+            {getFieldDecorator('fNote', {
+              initialValue: data.fNote,
               rules: [{ required: true, whitespace: true, message: '请输入备注！' }]
             })(<Input.TextArea rows={2} maxLength="50" disabled={disabled}/>)}
           </Form.Item>

@@ -5,7 +5,7 @@ import Pagination from '@/components/pagination'
 import Delete from '@/components/delete'
 import Alert from './alert'
 import StationSelect from '@/components/stationSelect/'
-import { getStationList, deleteStation, searchStation } from '@/api'
+import { getStationList, deleteStation } from '@/api'
 import { Table, Layout } from 'antd'
 
 class Branch extends Component {
@@ -16,7 +16,7 @@ class Branch extends Component {
     total: null,
     searchData: {
       pageNum: 1,
-      limit: 10,
+      limit: 17,
       fAreaid: ''
     },
     selectedRowKeys: []
@@ -41,13 +41,10 @@ class Branch extends Component {
     this.initData()
   }
   searchHandle = async(condition) => {
-    const res = await searchStation({
-      condition
+    await this.setState({
+      searchData: {...this.state.searchData, pageNum: 1 ,condition}
     })
-    this.setState({
-      personList: res.data.list,
-      total: res.data.total
-    })
+    this.initData()
   }
   pageChangeHandle = async(pageNum) => {
     await this.setState({
@@ -85,7 +82,7 @@ class Branch extends Component {
     const { visible, stationList, rowData, total, searchData } = this.state;
     return (
       <Layout>
-        <Breadcrumb first="管理平台" second="角色管理"/>
+        <Breadcrumb first="管理平台" second="站点管理"/>
         <Layout>
           <StationSelect onSelect={this.treeSelect}/>
           <Layout.Content>

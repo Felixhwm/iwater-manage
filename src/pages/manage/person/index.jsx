@@ -7,7 +7,7 @@ import Alert from './alert'
 import Organization from '@/components/organizationSelect'
 import './index.scss'
 import { Layout, Table } from 'antd'
-import { getUserList, deleteUser, searchUser } from '@/api'
+import { getUserList, deleteUser } from '@/api'
 
 export default class App extends Component {
   state = {
@@ -35,13 +35,10 @@ export default class App extends Component {
     })
   }
   searchHandle = async(condition) => {
-    const res = await searchUser({
-      condition
+    await this.setState({
+      searchData: {...this.state.searchData, pageNum: 1 ,condition}
     })
-    this.setState({
-      personList: res.data.list,
-      total: res.data.total
-    })
+    this.initData()
   }
   branchChange = async(val) => {
     console.log(val)
